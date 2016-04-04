@@ -1,6 +1,7 @@
 #pragma once
 
 #include <glm\glm.hpp>
+#include "Constants.h"
 
 //Not entirely sure why I am making a transform class
 //I suppose position rotation and scale all still apply in 2D so this class will be helpful
@@ -8,25 +9,25 @@ class Transform
 {
 public:
 	Transform();
-	Transform(glm::vec2 p, float r, glm::vec2 s);
+	Transform(Vector p);
+	Transform(Vector p, float r, Vector s);
 	~Transform();
 
 	//Interface for owners
-	void move(glm::vec2 offset);
-	void moveTo(glm::vec2 p);
+	void move(Vector offset);
+	void moveTo(Vector p);
 	void setRotation(float r);
 	void rotate(float offset);
-	void scale(glm::vec2 offset);
-	void setScale(glm::vec2 s);
+	void setScale(Vector s);
 
 	//Public interface 
 	float Rotation() const;
-	glm::vec2 Scale() const;
-	glm::vec2 Position() const;
+	Vector Scale() const;
+	Vector Position() const;
 
 private:
-	glm::vec2 position;
-	glm::vec2 scale;
-	float rotation;
+	Vector position;
+	Vector scale;
+	float orientation;
 };
 

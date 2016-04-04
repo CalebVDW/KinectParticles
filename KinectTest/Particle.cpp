@@ -1,50 +1,60 @@
 #include "Particle.h"
 
-float Particle::getInverseMass() const{ return inverseMass; }
+float Particle::getInverseMass() const{ return PhysicsActor::getInverseMass(); }
 
-void Particle::applyForce(glm::vec2 force)
+void Particle::applyForce(Vector force)
 {
-	acceleration += force * inverseMass;
+	PhysicsActor::applyForce(force);
 }
-void Particle::applyImpulse(glm::vec2 impulse)
+void Particle::applyImpulse(Vector impulse)
 {
-	velocity += impulse * inverseMass;
+	PhysicsActor::applyImpulse(impulse);
+}
+void Particle::markForDelete()
+{
+	//Marking for delete is implemented by setting the age beyond the limit
+	//This implementation will most likely stay in the long run 
+	age += lifeSpan;
 }
 
 bool Particle::isAlive() const
 {
 	if (age > lifeSpan)
 		return false;
+	return true;
 }
 
 //Returns false if the particle is dead
 void Particle::update(float dt)
 {
 	//Update colors and stuff
-	alpha = age / lifeSpan;
 	age += dt;
 
 	//Integration
-	PhysicsComponent::update(dt);
+	PhysicsActor::update(dt);
 }
 void Particle::render(SDL_Renderer* renderer)
 {
 	//Convert to screen coordinates
 	SDL_Rect drawRect;
-	drawRect.x = int((position.x + 1.0f) * Constants::HALF_SCREEN_WIDTH);
-	drawRect.y = int((-position.y + 1.0f) * Constants::HALF_SCREEN_HEIGHT);
-	drawRect.w = 10;
-	drawRect.h = 10;
+	math::NdcToPixel(drawRect.x, drawRect.y, transform.Position());
+
+	//Offset the drawrect so that it is centered over the Particle
+	drawRect.x -= renderRadius;
+	drawRect.y -= renderRadius;
+
+	drawRect.w = renderRadius * 2;
+	drawRect.h = renderRadius * 2;
 
 	//Draw the rectangle
 	SDL_SetRenderDrawColor(renderer, convertColor(color.x), convertColor(color.y), convertColor(color.z), convertColor(alpha));
 	SDL_RenderDrawRect(renderer, &drawRect);
 }
 
-Particle::Particle(float life, glm::vec3 color, glm::vec2 pos, glm::vec2 velocity)
-	:lifeSpan{ life }, color{ color }, position{ pos }, velocity{ velocity }
+Particle::Particle(float life, glm::vec3 color, Vector pos, Vector velocity)
+	:lifeSpan{ life }, color{ color }, PhysicsActor{ Transform{pos}, 1.0f, velocity }
 {
-	inverseMass = 1.0f;
+	renderRadius = 5;
 }
 
 

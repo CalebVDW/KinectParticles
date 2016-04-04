@@ -12,17 +12,24 @@
 class Emitter : public Actor
 {
 public:
-	Emitter(Transform t);
+	Emitter(Transform t, Vector direction, float rate = 1.0f, float speed = 1.0f);
 	virtual ~Emitter();
 
 	void update(float dt) override;
+	Particle* getParticle();
 
 private:
 	//These control the spawn paramteters of the particles
-	glm::vec2 direction;
+	Vector direction;
 	float speed;
 	glm::vec3 color;
-	float spawnRate;		//Number of particles to spawn per second
+	float spawnRate;												//Number of particles to spawn per second
+	float coolDownTime;
+	float timeSinceSpawn;
+
+	//Store the next particle to be emitted
+	Particle* nextParticle;
+	void createParticle();
 
 	//Floats varying 0 - 1.0 
 	//These determine how much random deviation there can be

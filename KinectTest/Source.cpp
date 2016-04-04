@@ -2,6 +2,7 @@
 //Kinect particle project
 
 #include <iostream>
+#include <SDL.h>
 
 #include "Scene.h"
 
@@ -16,7 +17,6 @@
 //Globals because I'm a lazy bastard
 SDL_Window* window = nullptr;
 SDL_Renderer* renderer = nullptr;
-NUI_SKELETON_FRAME myFrame;
 
 //Initializes SDL only
 bool init(SDL_Window** window, SDL_Renderer** renderer)
@@ -44,29 +44,51 @@ int main(int argc, char** argv){
 	std::cout << "Hello World!";
 
 	//Check if there is a sensor
-	int count;
-	NuiGetSensorCount(&count);
-	if (count < 1)
+	int sensorCount = 0;
+	NuiGetSensorCount(&sensorCount);
+	if (sensorCount < 1)
+	{
+		std::cout << "No sensor detected";
 		return -1;
+	}
 
-	//Create an interface for the sensor
-	INuiSensor* sensor;
-	NuiCreateSensorByIndex(0, &sensor);
+	//Step through all Kinect sensors
+	HRESULT hr;
+	INuiSensor* tempSensor = NULL;
+	INuiSensor* m_sensor = NULL;
+	for (int i = 0; i < sensorCount; ++i)
+	{
+		//Attempt to create the sensor pointer
+		hr = NuiCreateSensorByIndex(i, &tempSensor);
+		if (FAILED(hr))
+			continue;
 
-	//Create event
-	HANDLE myEvent = CreateEvent(
-		NULL,
-		TRUE,
-		FALSE,
-		TEXT("MyEvent")
-		);
+		//Check status of the current sensor
+		hr = tempSensor->NuiStatus();
+		if (S_OK == hr)
+		{
+			m_sensor = tempSensor;
+			break;
+		}
+		tempSensor->Release();
+	}
 
-	//I don't know what this is
-	sensor->NuiInitialize(NUI_INITIALIZE_FLAG_USES_SKELETON);
-	sensor->NuiSkeletonTrackingEnable(NULL, NULL);
+	HANDLE skeletonReady;
+	if (m_sensor != NULL)
+	{
+		hr = m_sensor->NuiInitialize(NUI_INITIALIZE_FLAG_USES_SKELETON);
+		if (SUCCEEDED(hr))
+		{
+			skeletonReady = CreateEventW(NULL, TRUE, FALSE, NULL);
+			hr = m_sensor->NuiSkeletonTrackingEnable(skeletonReady, 0);
+		}
+	}
 
-	//Enable skeleton tracking
-	HRESULT hr = NuiSkeletonTrackingEnable(myEvent, NUI_SKELETON_TRACKING_FLAG_ENABLE_SEATED_SUPPORT);
+	if (m_sensor == NULL || FAILED(hr))
+	{
+		std::cout << "No Kinect Found";
+		return E_FAIL;
+	}
 
 	//Initialize SDL
 	init(&window, &renderer);
@@ -82,50 +104,30 @@ int main(int argc, char** argv){
 	while (true)
 	{
 		//Wait indefinitely until a skeleton becomes available 
-		events[0] = myEvent;
+		events[0] = skeletonReady;
 		MsgWaitForMultipleObjects(1, events, FALSE, INFINITE, QS_ALLINPUT);
 
-		if (WAIT_OBJECT_0 == WaitForSingleObject(myEvent, 0))
+		if (m_sensor == NULL)
+			return -1;
+
+		if (WAIT_OBJECT_0 == WaitForSingleObject(skeletonReady, 0))
 		{
-			HRESULT r = sensor->NuiSkeletonGetNextFrame(0, &myFrame);
+			NUI_SKELETON_FRAME myFrame = { 0 };
+			HRESULT r = m_sensor->NuiSkeletonGetNextFrame(0, &myFrame);
 			if (FAILED(r))
 			{
 				std::cout << "Could not load skeleton" << std::endl;
 				continue;
 			}
+
+			//Smooth skeleton data
+			m_sensor->NuiTransformSmooth(&myFrame, NULL);
+
 			myScene.update(&myFrame);
+			myScene.render(renderer);
 		}
 	}
 	//END GAME LOOP////////////////////////////////////////////////////////////////////////////////
-
-	while (true)
-	{
-		SDL_RenderClear(renderer);
-
-		//Get skeleton data
-		NuiSkeletonGetNextFrame(1000, &myFrame);
-
-		//Get the first tracked skeleton
-		std::cout << myFrame.SkeletonData[0].SkeletonPositions[0].x << ", " << myFrame.SkeletonData[0].SkeletonPositions[0].y << std::endl;
-
-		//Step through all bones
-		for (int i = 0; i < 15; i++)
-		{
-			//Get joint positions
-			int x1, y1, x2, y2;
-			x1 = int(400.0f * myFrame.SkeletonData[0].SkeletonPositions[i].x) + 512;
-			y1 = int(400.0f * myFrame.SkeletonData[0].SkeletonPositions[i].y) + 400;
-			x2 = int(400.0f * myFrame.SkeletonData[0].SkeletonPositions[i + 1].x) + 512;
-			y2 = int(400.0f * myFrame.SkeletonData[0].SkeletonPositions[i + 1].y) + 400;
-
-			//Draw debug lines
-			
-			SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
-			SDL_RenderDrawLine(renderer, x1, y1, x2, y2);
-			SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-		}
-		SDL_RenderPresent(renderer);
-	}
 
 	return 0;
 }

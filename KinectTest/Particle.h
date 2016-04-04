@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Constants.h"
-#include "PhysicsComponent.h"
+#include "PhysicsActor.h"
 
 #include <SDL.h>
 
@@ -12,23 +12,31 @@ Uint8 inline convertColor(float a)
 	return Uint8(255.0f * a);
 }
 
-class Particle : public PhysicsComponent
+//Defines an object that is spawned, has a limited life span, and interacts with the physics system
+//Does not necessarily collide with other particles
+class Particle : public PhysicsActor
 {
 public:
-	Particle(float lifeSpan, glm::vec3 color, glm::vec2 pos, glm::vec2 velocity);
+	Particle(float lifeSpan, glm::vec3 color, Vector pos, Vector velocity);
 	virtual ~Particle();
 
 	void update(float dt);
 	void render(SDL_Renderer* renderer);
 
-	//Getters
-	float getInverseMass() const;
+	//Physics interface is made public for particles
+	void applyForce(Vector f);
+	void applyImpulse(Vector f);
+	void markForDelete();
+
+	//Const interface
 	bool isAlive() const;
+	float getInverseMass() const;
 
 private:
 	//Rendering data
 	glm::vec3 color;
 	float alpha;
+	int renderRadius;
 
 	//Creation destruction stuff
 	float lifeSpan;
