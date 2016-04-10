@@ -86,5 +86,8 @@
     <ClInclude Include="Target.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ParticleArray.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

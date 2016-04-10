@@ -108,6 +108,7 @@
     <ClInclude Include="ForceField.h" />
     <ClInclude Include="KinematicActor.h" />
     <ClInclude Include="Particle.h" />
+    <ClInclude Include="ParticleArray.h" />
     <ClInclude Include="PhysicsActor.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="Target.h" />
