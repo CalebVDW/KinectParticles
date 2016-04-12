@@ -73,7 +73,7 @@ int main(int argc, char** argv){
 		tempSensor->Release();
 	}
 
-	HANDLE skeletonReady;
+	HANDLE skeletonReady = nullptr;
 	if (m_sensor != NULL)
 	{
 		hr = m_sensor->NuiInitialize(NUI_INITIALIZE_FLAG_USES_SKELETON);

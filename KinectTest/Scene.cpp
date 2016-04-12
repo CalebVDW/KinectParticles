@@ -43,7 +43,7 @@ void Scene::update(NUI_SKELETON_FRAME* frame)
 	for (Emitter& e : emitters)
 	{
 		e.update(deltaTime);
-		
+		e.AddParticle(particles);
 	}
 
 	//Step through particles and update them
