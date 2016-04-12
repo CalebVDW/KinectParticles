@@ -2,8 +2,19 @@
 #include "Scene.h"
 
 
-Scene::Scene()
+Scene::Scene(bool withoutSensor)
+	:noSensor{ withoutSensor }
 {
+	if (noSensor)
+	{
+		//Initialize scene to take mouse input
+		dataCollection = &Scene::getMouseData;
+	}
+	else
+	{
+		//Initialize scene to take Kinect data
+		dataCollection = &Scene::getSensorData;
+	}
 	//Create stuff here
 	currentTime = SDL_GetPerformanceCounter();
 
@@ -16,7 +27,7 @@ Scene::Scene()
 
 
 //Apply forces, resolve collisions, etc.
-void Scene::update(NUI_SKELETON_FRAME* frame)
+void Scene::Update(NUI_SKELETON_FRAME* frame)
 {
 	//Update kinect data
 	skeletonFrame = frame;
@@ -26,17 +37,10 @@ void Scene::update(NUI_SKELETON_FRAME* frame)
 	currentTime = SDL_GetPerformanceCounter();
 	float deltaTime = float(double(currentTime - previousTime) / double(SDL_GetPerformanceFrequency()));
 
-	//Get position of the player's right hand
-	NUI_SKELETON_DATA firstSkeleton = skeletonFrame->SkeletonData[0];
-	for (int i = 0; i < NUI_SKELETON_COUNT; ++i)
-	{
-		if (skeletonFrame->SkeletonData[i].eTrackingState == NUI_SKELETON_TRACKED)
-			firstSkeleton = skeletonFrame->SkeletonData[i];
-	}
-	rightHand.setPosition(Vector(firstSkeleton.SkeletonPositions[NUI_SKELETON_POSITION_HAND_RIGHT].x,
-		firstSkeleton.SkeletonPositions[NUI_SKELETON_POSITION_HAND_RIGHT].y));
-	leftHand.setPosition(Vector(firstSkeleton.SkeletonPositions[NUI_SKELETON_POSITION_HAND_LEFT].x,
-		firstSkeleton.SkeletonPositions[NUI_SKELETON_POSITION_HAND_LEFT].y));
+	//Process player input
+	(this->*dataCollection)();
+
+	
 
 	//Add new particles that are created by emitters
 	for (Emitter& e : emitters)
@@ -52,9 +56,6 @@ void Scene::update(NUI_SKELETON_FRAME* frame)
 	{
 		for (int i = particles.size() - 1; i >= 0; i--)
 		{
-			//Apply forces to particles
-			if (particles[i]->getInverseMass() != 0)
-				particles[i]->applyForce(ForceFunctions::Gravity(*particles[i], rightHand.getTransform().Position()));
 			//Call update which moves the particles based on applied forces and existing velocity
 			particles[i]->update(deltaTime);
 			if (!particles[i]->isAlive())
@@ -75,8 +76,25 @@ void Scene::update(NUI_SKELETON_FRAME* frame)
 	}
 }
 
+void Scene::getSensorData()
+{
+	//Get position of the player's right hand
+	skeletonData0 = skeletonFrame->SkeletonData[0];
+	for (int i = 0; i < NUI_SKELETON_COUNT; ++i)
+	{
+		if (skeletonFrame->SkeletonData[i].eTrackingState == NUI_SKELETON_TRACKED)
+			skeletonData0 = skeletonFrame->SkeletonData[i];
+	}
+	//TODO//Create skeleton objects
+}
+
+void Scene::getMouseData()
+{
+
+}
+
 //Draw everything
-void Scene::render(SDL_Renderer* r)
+void Scene::Render(SDL_Renderer* r)
 {
 	renderer = r;
 	SDL_RenderClear(renderer);

@@ -74,6 +74,7 @@ int main(int argc, char** argv){
 	}
 
 	HANDLE skeletonReady;
+	//Check for connected sensor and initialize it if it exists
 	if (m_sensor != NULL)
 	{
 		hr = m_sensor->NuiInitialize(NUI_INITIALIZE_FLAG_USES_SKELETON);
@@ -83,6 +84,11 @@ int main(int argc, char** argv){
 			hr = m_sensor->NuiSkeletonTrackingEnable(skeletonReady, 0);
 		}
 	}
+	else
+	{
+		//Run without sensor if there isn't one plugged in
+	}
+
 
 	if (m_sensor == NULL || FAILED(hr))
 	{

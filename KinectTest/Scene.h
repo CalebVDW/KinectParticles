@@ -16,13 +16,19 @@
 class Scene
 {
 public:
-	Scene();
+	Scene(bool WithoutSensor = false);
 	~Scene();
 
-	void update(NUI_SKELETON_FRAME* frame);
-	void render(SDL_Renderer* r);
+	void Update(NUI_SKELETON_FRAME* frame);
+	void Render(SDL_Renderer* r);
 
 private:
+	bool noSensor;
+	typedef void(Scene::*sceneProcedure)();
+	sceneProcedure dataCollection;
+	void getSensorData();
+	void getMouseData();
+
 	//Draw representation of the skeleton to the screen
 	void drawSkeleton(NUI_SKELETON_DATA skel);
 
@@ -31,6 +37,8 @@ private:
 
 	//Kinect Data that is updated every frame
 	NUI_SKELETON_FRAME* skeletonFrame;
+	NUI_SKELETON_DATA skeletonData0;
+	NUI_SKELETON_DATA skeletonData1;
 
 	//Rendering data
 	SDL_Renderer* renderer;
@@ -40,10 +48,6 @@ private:
 	std::vector<ForceField> fields;
 	std::vector<Emitter> emitters;
 	std::vector<Target> targets;
-
-	//Hands will simply be kinematic actors that have things added as children
-	KinematicActor rightHand;
-	KinematicActor leftHand;
 
 	//Time keeping
 	long long currentTime, previousTime;
