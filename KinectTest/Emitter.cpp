@@ -9,24 +9,15 @@ void Emitter::update(float dt)
 	if (timeSinceSpawn > coolDownTime)
 	{
 		timeSinceSpawn = timeSinceSpawn - coolDownTime;
-		createParticle();
+		particleReady = true;
 	}
 }
 
-Particle* Emitter::getParticle()
+void Emitter::AddParticle(ParticleArray<Particle>& pArray)
 {
-	//Return the stored particle if there is one
-	if (!nextParticle)
-		return nullptr;
-	Particle* temp = nextParticle;
-	nextParticle = nullptr;
-	return temp;
-}
-
-void Emitter::createParticle()
-{
-	//Create and store a new particle with the current parameters
-	nextParticle = new Particle(2.0f, color, transform.Position(), speed * direction);
+	if (particleReady)
+		pArray.Push(Particle(2.0f, color, transform.Position(), speed * direction));
+	particleReady = false;
 }
 
 Emitter::Emitter(Transform t, Vector direction, float rate, float speed)

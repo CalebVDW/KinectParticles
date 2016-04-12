@@ -3,6 +3,7 @@
 
 
 Scene::Scene()
+	:particles{ 10000 }
 {
 	//Create stuff here
 	currentTime = SDL_GetPerformanceCounter();
@@ -42,34 +43,31 @@ void Scene::update(NUI_SKELETON_FRAME* frame)
 	for (Emitter& e : emitters)
 	{
 		e.update(deltaTime);
-		Particle* p = e.getParticle();
-		if (p)
-			particles.push_back(p);
+		
 	}
 
-	//Step through list of particles
-	if (particles.size() > 0)
+	//Step through particles and update them
+	for (int i = 0; i < particles.Size(); ++i)
 	{
-		for (int i = particles.size() - 1; i >= 0; i--)
-		{
-			//Apply forces to particles
-			if (particles[i]->getInverseMass() != 0)
-				particles[i]->applyForce(ForceFunctions::Gravity(*particles[i], rightHand.getTransform().Position()));
-			//Call update which moves the particles based on applied forces and existing velocity
-			particles[i]->update(deltaTime);
-			if (!particles[i]->isAlive())
-				particles.erase(particles.begin() + i);
-		}
+		//Apply forces to particles
+		if (particles[i].getInverseMass() != 0)
+			particles[i].applyForce(ForceFunctions::Gravity(particles[i], rightHand.getTransform().Position()));
+		//Call update which moves the particles based on applied forces and existing velocity
+		particles[i].update(deltaTime);
 	}
+
+	//Delete particles that have exceeded their lifespan
+	particles.RemoveElements([](const Particle& p)->bool {return p.isAlive(); });
 
 	//Step through targets
 	for (Target& target : targets)
 	{
 		//Check particle collisions with target
-		for (Particle* p : particles)
+		for (int i = 0; i < particles.Size(); ++i)
 		{
-			target.collide(p);
+			target.collide(&particles[i]);
 		}
+		
 		//Update target's location
 		target.update(deltaTime);
 	}
@@ -81,9 +79,9 @@ void Scene::render(SDL_Renderer* r)
 	renderer = r;
 	SDL_RenderClear(renderer);
 	//Draw particles
-	for (Particle* p : particles)
+	for (int i = 0; i < particles.Size(); ++i)
 	{
-		p->render(renderer);
+		particles[i].render(renderer);
 	}
 
 	//Draw targets

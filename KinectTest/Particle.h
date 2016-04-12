@@ -14,9 +14,12 @@ Uint8 inline convertColor(float a)
 
 //Defines an object that is spawned, has a limited life span, and interacts with the physics system
 //Does not necessarily collide with other particles
+
+//Particles are lightweight and passed by value. They do not hold any resources that need to be released
 class Particle : public PhysicsActor
 {
 public:
+	Particle();
 	Particle(float lifeSpan, glm::vec3 color, Vector pos, Vector velocity);
 	virtual ~Particle();
 
