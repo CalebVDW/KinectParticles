@@ -43,13 +43,23 @@ bool init(SDL_Window** window, SDL_Renderer** renderer)
 int main(int argc, char** argv){
 	std::cout << "Hello World!";
 
+	//Initialize SDL
+	init(&window, &renderer);
+
 	//Check if there is a sensor
 	int sensorCount = 0;
 	NuiGetSensorCount(&sensorCount);
 	if (sensorCount < 1)
 	{
-		std::cout << "No sensor detected";
-		return -1;
+		std::cout << "No sensor detected. Running with mouse input";
+		//Run without sensor here
+		while (true)
+		{
+			Scene mouseScene(true);
+			mouseScene.Update(nullptr);
+			mouseScene.Render(renderer);
+		}
+		return 0;
 	}
 
 	//Step through all Kinect sensors
@@ -73,7 +83,7 @@ int main(int argc, char** argv){
 		tempSensor->Release();
 	}
 
-	HANDLE skeletonReady;
+	HANDLE skeletonReady = nullptr;
 	//Check for connected sensor and initialize it if it exists
 	if (m_sensor != NULL)
 	{
@@ -84,11 +94,6 @@ int main(int argc, char** argv){
 			hr = m_sensor->NuiSkeletonTrackingEnable(skeletonReady, 0);
 		}
 	}
-	else
-	{
-		//Run without sensor if there isn't one plugged in
-	}
-
 
 	if (m_sensor == NULL || FAILED(hr))
 	{
@@ -96,13 +101,10 @@ int main(int argc, char** argv){
 		return E_FAIL;
 	}
 
-	//Initialize SDL
-	init(&window, &renderer);
-
 	//Initialize scene
 	Scene myScene;
 
-	//NEW GAME LOOP HERE///////////////////////////////////////////////////////////////////////////
+	//RUN WITH SENSOR HERE///////////////////////////////////////////////////////////////////////////
 
 	//Kinect event polling stuff
 	HANDLE events[1];
@@ -129,8 +131,8 @@ int main(int argc, char** argv){
 			//Smooth skeleton data
 			m_sensor->NuiTransformSmooth(&myFrame, NULL);
 
-			myScene.update(&myFrame);
-			myScene.render(renderer);
+			myScene.Update(&myFrame);
+			myScene.Render(renderer);
 		}
 	}
 	//END GAME LOOP////////////////////////////////////////////////////////////////////////////////

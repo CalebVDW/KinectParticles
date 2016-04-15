@@ -13,6 +13,8 @@
 #include "Target.h"
 
 //A container for particles, emitters, skeletons and any other objects that the game needs
+//TODO//Refactor so that default constructor uses mouse input and parameterized constructor uses Kinect input
+//This will also reduce the complexity of the code in main
 class Scene
 {
 public:

@@ -116,7 +116,8 @@ void Scene::Render(SDL_Renderer* r)
 	for (int i = 0; i < NUI_SKELETON_COUNT; ++i)
 	{
 		//Draw the current skeleton
-		drawSkeleton(skeletonFrame->SkeletonData[i]);
+		if(skeletonFrame)
+			drawSkeleton(skeletonFrame->SkeletonData[i]);
 	}
 	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
 	SDL_RenderPresent(renderer);
