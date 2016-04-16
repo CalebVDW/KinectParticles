@@ -19,7 +19,7 @@
 class Scene
 {
 public:
-	Scene(bool WithoutSensor = false);
+	Scene(bool withoutSensor = false);
 	~Scene();
 
 	void Update(NUI_SKELETON_FRAME* frame);
