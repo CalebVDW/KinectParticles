@@ -11,6 +11,7 @@
 #include "ForceField.h"
 #include "Emitter.h"
 #include "Target.h"
+#include "ParticleArray.h"
 
 //A container for particles, emitters, skeletons and any other objects that the game needs
 //TODO//Refactor so that default constructor uses mouse input and parameterized constructor uses Kinect input
@@ -46,7 +47,7 @@ private:
 	SDL_Renderer* renderer;
 
 	//Scene content
-	std::vector<Particle*> particles;
+	ParticleArray<Particle> particles;
 	std::vector<ForceField> fields;
 	std::vector<Emitter> emitters;
 	std::vector<Target> targets;
