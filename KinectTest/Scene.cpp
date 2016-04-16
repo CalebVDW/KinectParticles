@@ -3,7 +3,7 @@
 
 
 Scene::Scene(bool withoutSensor)
-	:particles{ 10000 }, noSensor{ withoutSensor }
+	:particles{ Constants::MAX_PARTICLES }, noSensor{ withoutSensor }
 {
 	dataCollection = noSensor ? &Scene::getMouseData : &Scene::getSensorData;
 
@@ -40,7 +40,10 @@ void Scene::Update(NUI_SKELETON_FRAME* frame)
 	}
 
 	//Step through particles and update them
-	
+	for (int i = 0; i < particles.Size(); ++i)
+	{
+		particles[i].update(deltaTime);
+	}
 
 	//Delete particles that have exceeded their lifespan
 	particles.RemoveElements([](const Particle& p)->bool {return p.isAlive(); });

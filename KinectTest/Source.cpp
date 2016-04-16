@@ -41,7 +41,7 @@ bool init(SDL_Window** window, SDL_Renderer** renderer)
 //All times will be in seconds for simplicity
 //Colors will be passed as floats/vecs until render time//Values 0-1.0f
 int main(int argc, char** argv){
-	std::cout << "Hello World!";
+	std::cout << "Hello World!" << std::endl;
 
 	//Initialize SDL
 	init(&window, &renderer);
@@ -51,11 +51,12 @@ int main(int argc, char** argv){
 	NuiGetSensorCount(&sensorCount);
 	if (sensorCount < 1)
 	{
-		std::cout << "No sensor detected. Running with mouse input";
+		std::cout << "No sensor detected. Running with mouse input" << std::endl;
+		Scene mouseScene(true);
+
 		//Run without sensor here
 		while (true)
 		{
-			Scene mouseScene(true);
 			mouseScene.Update(nullptr);
 			mouseScene.Render(renderer);
 		}

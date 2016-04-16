@@ -15,6 +15,8 @@ namespace Constants
 	const float FLT_SCREEN_HEIGHT = float(SCREEN_HEIGHT);
 	const float FLT_HALF_SCREEN_WIDTH = float(HALF_SCREEN_WIDTH);
 	const float FLT_HALF_SCREEN_HEIGHT = float(HALF_SCREEN_HEIGHT);
+
+	const int MAX_PARTICLES = 10000;
 }
 
 //Putting constants and a few misc functions here

@@ -10,6 +10,7 @@ Particle::Particle(float life, glm::vec3 color, Vector pos, Vector velocity)
 	:lifeSpan{ life }, color{ color }, PhysicsActor{ Transform{ pos }, 1.0f, velocity }
 {
 	renderRadius = 5;
+	age = 0;
 }
 
 

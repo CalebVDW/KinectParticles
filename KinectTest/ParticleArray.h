@@ -29,9 +29,10 @@ private:
 
 //Create the particle array and allocate memory for the given number of elements
 template <typename T>
-ParticleArray<T>::ParticleArray(int index)
+ParticleArray<T>::ParticleArray(int maxSize)
+	:maxSize{ maxSize }, currentSize{ 0 }
 {
-	head = new T[index];
+	head = new T[maxSize];
 }
 
 //Remove a single element without validating index for efficiency 
@@ -67,8 +68,7 @@ template <typename T>
 void ParticleArray<T>::Push(T element)
 {
 	if (currentSize < maxSize)
-		head[currentSize] = element;
-	++currentSize;
+		head[currentSize++] = element;
 }
 
 //Add multiple elements to the end of the array
