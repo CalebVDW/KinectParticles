@@ -16,7 +16,7 @@ void Skeleton::Update(float dt, const NUI_SKELETON_DATA& data)
 		joints[i].Update(dt, data.SkeletonPositions[i]);
 	}
 	//Skeleton's position has no real meaning but I will update it anyway
-	Actor::update(dt);
+	Actor::Update(dt);
 }
 
 void Skeleton::Render(SDL_Renderer* renderer)
@@ -59,10 +59,10 @@ void Skeleton::drawBone(SDL_Renderer* renderer, NUI_SKELETON_POSITION_INDEX join
 	//Get joint positions
 	int x1, y1, x2, y2;
 	float skeletonScale = 400.0f;
-	x1 = int(skeletonScale * joints[joint0].getTransform().Position().x) + Constants::HALF_SCREEN_WIDTH;
-	y1 = -int(skeletonScale * joints[joint0].getTransform().Position().y) + Constants::HALF_SCREEN_HEIGHT;
-	x2 = int(skeletonScale * joints[joint1].getTransform().Position().x) + Constants::HALF_SCREEN_WIDTH;
-	y2 = -int(skeletonScale * joints[joint1].getTransform().Position().y) + Constants::HALF_SCREEN_HEIGHT;
+	x1 = int(skeletonScale * joints[joint0].GetTransform().Position().x) + Constants::HALF_SCREEN_WIDTH;
+	y1 = -int(skeletonScale * joints[joint0].GetTransform().Position().y) + Constants::HALF_SCREEN_HEIGHT;
+	x2 = int(skeletonScale * joints[joint1].GetTransform().Position().x) + Constants::HALF_SCREEN_WIDTH;
+	y2 = -int(skeletonScale * joints[joint1].GetTransform().Position().y) + Constants::HALF_SCREEN_HEIGHT;
 
 	//Draw debug lines
 	SDL_RenderDrawLine(renderer, x1, y1, x2, y2);

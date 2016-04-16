@@ -7,30 +7,30 @@ Target::Target(Transform t, float r, float inverseMass, Vector velocity)
 {
 }
 
-bool Target::collide(Particle* p)
+bool Target::Collide(Particle* p)
 {
 	//Test intersection
-	bool intersecting = math::CircleCollision(transform.Position(), p->getTransform().Position(), radius, 0.005f);
+	bool intersecting = math::CircleCollision(transform.Position(), p->GetTransform().Position(), radius, 0.005f);
 	if (!intersecting)
 		return false;
 
 	//Apply impulse if applicable 
-	applyImpulse(p->getVelocity() / p->getInverseMass());
+	ApplyImpulse(p->Velocity() / p->InverseMass());
 
 	//Delete particle
-	p->markForDelete();
+	p->MarkForDelete();
 
 	//Update color
 	color.g += 0.01f;
 	return true;
 }
 
-void Target::update(float dt)
+void Target::Update(float dt)
 {
-	PhysicsActor::update(dt);
+	PhysicsActor::Update(dt);
 }
 
-void Target::render(SDL_Renderer* renderer)
+void Target::Render(SDL_Renderer* renderer)
 {
 	//Draw a circle to the screen 
 	SDL_Rect drawRect;

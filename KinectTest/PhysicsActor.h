@@ -10,17 +10,17 @@ public:
 	PhysicsActor(Transform t, float inverseMass, Vector velocity = Vector{}, float angularVelocity = 0);
 	~PhysicsActor();
 
-	void update(float dt) override;
+	void Update(float dt) override;
 
 	//Public interface
-	float getInverseMass() const;
-	float getMass() const;
-	Vector getVelocity() const;
+	float InverseMass() const;
+	float Mass() const;
+	Vector Velocity() const;
 
 protected:
 	//Physics engine interface
-	void applyForce(Vector force);
-	void applyImpulse(Vector impulse);
+	void ApplyForce(Vector force);
+	void ApplyImpulse(Vector impulse);
 
 private:
 	Vector acceleration, velocity;

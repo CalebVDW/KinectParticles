@@ -22,9 +22,9 @@ public:
 	ForceField();
 	~ForceField();
 
-	Vector getForce(const PhysicsActor& target) const;
-	void setForceFunction(Vector(*f)(const PhysicsActor& object, Vector origin));
-	void setFieldStrength(float f);
+	Vector GetForce(const PhysicsActor& target) const;
+	void SetForceFunction(Vector(*f)(const PhysicsActor& object, Vector origin));
+	void SetFieldStrength(float f);
 
 private:
 	Vector(*forceFunction)(const PhysicsActor& object, Vector origin);

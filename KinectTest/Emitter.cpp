@@ -1,9 +1,9 @@
 #include "Emitter.h"
 
 
-void Emitter::update(float dt)
+void Emitter::Update(float dt)
 {
-	Actor::update(dt);
+	Actor::Update(dt);
 	//Spawn a particle if enough time has passed 
 	timeSinceSpawn += dt;
 	if (timeSinceSpawn > coolDownTime)

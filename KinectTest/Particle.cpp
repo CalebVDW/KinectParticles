@@ -15,24 +15,24 @@ Particle::Particle(float life, glm::vec3 color, Vector pos, Vector velocity, Uin
 }
 
 
-float Particle::getInverseMass() const{ return PhysicsActor::getInverseMass(); }
+float Particle::InverseMass() const{ return PhysicsActor::InverseMass(); }
 
-void Particle::applyForce(Vector force)
+void Particle::ApplyForce(Vector force)
 {
-	PhysicsActor::applyForce(force);
+	PhysicsActor::ApplyForce(force);
 }
-void Particle::applyImpulse(Vector impulse)
+void Particle::ApplyImpulse(Vector impulse)
 {
-	PhysicsActor::applyImpulse(impulse);
+	PhysicsActor::ApplyImpulse(impulse);
 }
-void Particle::markForDelete()
+void Particle::MarkForDelete()
 {
 	//Marking for delete is implemented by setting the age beyond the limit
 	//This implementation will most likely stay in the long run 
 	age += lifeSpan;
 }
 
-bool Particle::isAlive() const
+bool Particle::IsAlive() const
 {
 	if (age > lifeSpan)
 		return false;
@@ -40,17 +40,17 @@ bool Particle::isAlive() const
 }
 
 //Returns false if the particle is dead
-void Particle::update(float dt)
+void Particle::Update(float dt)
 {
 	//Update colors and stuff
 	age += dt;
 
 	//Integration
-	PhysicsActor::update(dt);
+	PhysicsActor::Update(dt);
 }
 
 //TODO//Fix queue code so that trail length is independent of frame rate
-void Particle::render(SDL_Renderer* renderer)
+void Particle::Render(SDL_Renderer* renderer)
 {
 	//Update previous positions queue
 	renderPositions.push_front(transform.Position());

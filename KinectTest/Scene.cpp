@@ -35,18 +35,18 @@ void Scene::Update(NUI_SKELETON_FRAME* frame)
 	//Add new particles that are created by emitters
 	for (Emitter& e : emitters)
 	{
-		e.update(deltaTime);
+		e.Update(deltaTime);
 		e.AddParticle(particles);
 	}
 
 	//Step through particles and update them
 	for (int i = 0; i < particles.Size(); ++i)
 	{
-		particles[i].update(deltaTime);
+		particles[i].Update(deltaTime);
 	}
 
 	//Delete particles that have exceeded their lifespan
-	particles.RemoveElements([](const Particle& p)->bool {return p.isAlive(); });
+	particles.RemoveElements([](const Particle& p)->bool {return p.IsAlive(); });
 
 	//Step through targets
 	for (Target& target : targets)
@@ -54,11 +54,11 @@ void Scene::Update(NUI_SKELETON_FRAME* frame)
 		//Check particle collisions with target
 		for (int i = 0; i < particles.Size(); ++i)
 		{
-			target.collide(&particles[i]);
+			target.Collide(&particles[i]);
 		}
 		
 		//Update target's location
-		target.update(deltaTime);
+		target.Update(deltaTime);
 	}
 }
 
@@ -102,13 +102,13 @@ void Scene::Render(SDL_Renderer* r)
 	//Draw particles
 	for (int i = 0; i < particles.Size(); ++i)
 	{
-		particles[i].render(renderer);
+		particles[i].Render(renderer);
 	}
 
 	//Draw targets
 	for (Target& target : targets)
 	{
-		target.render(renderer);
+		target.Render(renderer);
 	}
 
 	//Draw skeleton

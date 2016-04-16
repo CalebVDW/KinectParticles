@@ -16,7 +16,7 @@ public:
 	Emitter(Transform t, Vector direction, float rate = 1.0f, float speed = 1.0f);
 	virtual ~Emitter();
 
-	void update(float dt) override;
+	void Update(float dt) override;
 	void AddParticle(ParticleArray<Particle>& pArray);
 
 private:

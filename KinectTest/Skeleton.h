@@ -20,7 +20,7 @@ private:
 	class KinectJoint : public KinematicActor {
 	public:
 		KinectJoint(Transform t) :KinematicActor{ t } {}
-		void Update(float dt, Vector4 position) { transform.moveTo(math::MakeVector(position)); depth = position.z; }
+		void Update(float dt, Vector4 position) { transform.SetPosition(math::MakeVector(position)); depth = position.z; }
 	private:
 		float depth;
 	};

@@ -7,10 +7,10 @@ public:
 	Collider(Transform t, float r);
 	~Collider();
 
-	void update(float dt) override;
-	bool testIntersection(const Collider& a);
+	void Update(float dt) override;
+	bool TestIntersection(const Collider& a);
 
-	float getRadius() const;
+	float Radius() const;
 
 private:
 	Actor* owner;

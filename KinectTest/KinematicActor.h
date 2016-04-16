@@ -11,10 +11,10 @@ public:
 	KinematicActor(Transform t);
 	~KinematicActor();
 
-	void setPosition(Vector p);
-	void setRotation(float angle);
+	void SetPosition(Vector p);
+	void SetRotation(float angle);
 	
-	void translate(Vector offset);
-	void rotate(float angle);
+	void Translate(Vector offset);
+	void Rotate(float angle);
 };
 

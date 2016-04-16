@@ -1,8 +1,8 @@
 #include "Actor.h"
 
 
-const Transform& Actor::getTransform() const{ return transform; }
-void Actor::update(float dt){ return; }
+const Transform& Actor::GetTransform() const{ return transform; }
+void Actor::Update(float dt){ return; }
 
 Actor::Actor(Transform t)
 	:transform{ t }

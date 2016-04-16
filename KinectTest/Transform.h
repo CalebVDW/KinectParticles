@@ -14,11 +14,11 @@ public:
 	~Transform();
 
 	//Interface for owners
-	void move(Vector offset);
-	void moveTo(Vector p);
-	void setRotation(float r);
-	void rotate(float offset);
-	void setScale(Vector s);
+	void Translate(Vector offset);
+	void SetPosition(Vector p);
+	void SetRotation(float r);
+	void Rotate(float offset);
+	void SetScale(Vector s);
 
 	//Public interface 
 	float Rotation() const;

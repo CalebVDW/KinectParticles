@@ -15,11 +15,11 @@ Transform::Transform(Vector p, float r, Vector s)
 {
 }
 
-void Transform::move(Vector offset) { position += offset; }
-void Transform::moveTo(Vector p) { position = p; }
-void Transform::setRotation(float r) { orientation = r; }
-void Transform::rotate(float offset) { orientation += offset; }
-void Transform::setScale(Vector s) { scale = s; }
+void Transform::Translate(Vector offset) { position += offset; }
+void Transform::SetPosition(Vector p) { position = p; }
+void Transform::SetRotation(float r) { orientation = r; }
+void Transform::Rotate(float offset) { orientation += offset; }
+void Transform::SetScale(Vector s) { scale = s; }
 
 //Public interface 
 float Transform::Rotation() const { return orientation; }

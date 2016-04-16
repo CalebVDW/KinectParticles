@@ -9,24 +9,24 @@ Collider::Collider(Transform t, float r)
 
 //Moves the collider to the owner actor's location
 //Update should be called at the end of the update function for the owner actor
-void Collider::update(float dt)
+void Collider::Update(float dt)
 {
-	transform.moveTo(owner->getTransform().Position());
-	Actor::update(dt);
+	transform.SetPosition(owner->GetTransform().Position());
+	Actor::Update(dt);
 }
 
 //Test intersection of 2 circle colliders
 //Extends into 3+ dimensions depending on what vector type is used
-bool Collider::testIntersection(const Collider& a)
+bool Collider::TestIntersection(const Collider& a)
 {
-	Vector difference = a.getTransform().Position() - transform.Position();
+	Vector difference = a.GetTransform().Position() - transform.Position();
 	float distSquare = glm::dot(difference, difference);
-	float radiusSquare = math::square(a.getRadius() + radius);
+	float radiusSquare = math::square(a.Radius() + radius);
 	return radiusSquare > distSquare;
 }
 
 
-float Collider::getRadius() const { return radius; }
+float Collider::Radius() const { return radius; }
 
 
 Collider::~Collider()

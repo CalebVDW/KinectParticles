@@ -12,9 +12,9 @@ public:
 
 	//This tests intersection with a particle and deletes it if an intersection is detected
 	//This interface will need to be overhauled soon 
-	bool collide(Particle* p);
-	void update(float dt) override;
-	void render(SDL_Renderer* renderer);
+	bool Collide(Particle* p);
+	void Update(float dt) override;
+	void Render(SDL_Renderer* renderer);
 
 private:
 	float radius;

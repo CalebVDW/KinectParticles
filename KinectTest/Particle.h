@@ -25,17 +25,17 @@ public:
 	Particle(float lifeSpan, glm::vec3 color, Vector pos, Vector velocity, Uint32 tailLength = 100);
 	virtual ~Particle();
 
-	void update(float dt);
-	void render(SDL_Renderer* renderer);
+	void Update(float dt);
+	void Render(SDL_Renderer* renderer);
 
 	//Physics interface is made public for particles
-	void applyForce(Vector f);
-	void applyImpulse(Vector f);
-	void markForDelete();
+	void ApplyForce(Vector f);
+	void ApplyImpulse(Vector f);
+	void MarkForDelete();
 
 	//Const interface
-	bool isAlive() const;
-	float getInverseMass() const;
+	bool IsAlive() const;
+	float InverseMass() const;
 
 private:
 	//Rendering data

@@ -14,9 +14,9 @@ public:
 	Actor(Transform t);
 	virtual ~Actor();
 
-	const Transform& getTransform() const;
+	const Transform& GetTransform() const;
 
-	virtual void update(float dt);
+	virtual void Update(float dt);
 
 protected:
 	Transform transform;
