@@ -4,6 +4,8 @@
 #include "PhysicsActor.h"
 
 #include <SDL.h>
+#include <deque>
+#include <queue>
 
 #include <glm\glm.hpp>
 
@@ -20,7 +22,7 @@ class Particle : public PhysicsActor
 {
 public:
 	Particle();
-	Particle(float lifeSpan, glm::vec3 color, Vector pos, Vector velocity);
+	Particle(float lifeSpan, glm::vec3 color, Vector pos, Vector velocity, Uint32 tailLength = 100);
 	virtual ~Particle();
 
 	void update(float dt);
@@ -40,6 +42,7 @@ private:
 	glm::vec3 color;
 	float alpha;
 	int renderRadius;
+	std::deque<Vector> renderPositions;
 
 	//Creation destruction stuff
 	float lifeSpan;
