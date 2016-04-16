@@ -1,5 +1,7 @@
 #pragma once
 #include <glm\glm.hpp>
+#include <Windows.h>
+#include <NuiApi.h>
 
 //Using a typedef for the vector type in case I want to convert to 3D later
 typedef glm::vec2 Vector;
@@ -31,5 +33,6 @@ namespace math
 	void NdcToPixel(int& x, int& y, Vector pos);
 	//Determines if 2 circles are intersecting
 	bool CircleCollision(Vector center1, Vector center2, float radius1, float radius2);
-}
 
+	Vector MakeVector(Vector4 v);
+}

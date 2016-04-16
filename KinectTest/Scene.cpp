@@ -27,7 +27,7 @@ void Scene::Update(NUI_SKELETON_FRAME* frame)
 	//Timekeeping stuff
 	previousTime = currentTime;
 	currentTime = SDL_GetPerformanceCounter();
-	float deltaTime = float(double(currentTime - previousTime) / double(SDL_GetPerformanceFrequency()));
+	deltaTime = float(double(currentTime - previousTime) / double(SDL_GetPerformanceFrequency()));
 
 	//Process Player input
 	(this->*dataCollection)();
@@ -69,19 +69,29 @@ void Scene::getMouseData()
 
 void Scene::getSensorData()
 {
-	skeletonData0 = skeletonFrame->SkeletonData[0];
-	for (int i = 0; i < NUI_SKELETON_COUNT; ++i)
+	//Find first tracked skeleton
+	int index0 = 0;
+	for (; index0 < NUI_SKELETON_COUNT; ++index0)
 	{
-		if (skeletonFrame->SkeletonData[i].eTrackingState == NUI_SKELETON_TRACKED)
-			skeletonData0 = skeletonFrame->SkeletonData[i];
+		if (skeletonFrame->SkeletonData[index0].eTrackingState == NUI_SKELETON_TRACKED)
+			break;
 	}
-	//TODO//Create the skeleton objects
-	/*
-	rightHand.setPosition(Vector(firstSkeleton.SkeletonPositions[NUI_SKELETON_POSITION_HAND_RIGHT].x,
-		firstSkeleton.SkeletonPositions[NUI_SKELETON_POSITION_HAND_RIGHT].y));
-	leftHand.setPosition(Vector(firstSkeleton.SkeletonPositions[NUI_SKELETON_POSITION_HAND_LEFT].x,
-		firstSkeleton.SkeletonPositions[NUI_SKELETON_POSITION_HAND_LEFT].y));
-		*/
+	//Find second tracked skeleton
+	int index1 = index0 + 1;
+	for (; index1 < NUI_SKELETON_COUNT; ++index1)
+	{
+		if (skeletonFrame->SkeletonData[index1].eTrackingState == NUI_SKELETON_TRACKED)
+			break;
+	}
+	//Update player skeletons if skeletons were found
+	if (index0 < NUI_SKELETON_COUNT)
+		player0.Update(deltaTime, skeletonFrame->SkeletonData[index0]);
+	else
+		player0.Deactivate();
+	if (index1 < NUI_SKELETON_COUNT)
+		player1.Update(deltaTime, skeletonFrame->SkeletonData[index1]);
+	else
+		player1.Deactivate();
 }
 
 //Draw everything
@@ -103,60 +113,11 @@ void Scene::Render(SDL_Renderer* r)
 
 	//Draw skeleton
 	SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
-	
-	for (int i = 0; i < NUI_SKELETON_COUNT; ++i)
-	{
-		//Draw the current skeleton
-		if(skeletonFrame)
-			drawSkeleton(skeletonFrame->SkeletonData[i]);
-	}
+	player0.Render(renderer);
+	player1.Render(renderer);
+
 	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
 	SDL_RenderPresent(renderer);
-}
-
-void Scene::drawSkeleton(NUI_SKELETON_DATA skel)
-{
-	drawBone(skel, NUI_SKELETON_POSITION_HEAD, NUI_SKELETON_POSITION_SHOULDER_CENTER);
-	drawBone(skel, NUI_SKELETON_POSITION_SHOULDER_CENTER, NUI_SKELETON_POSITION_SHOULDER_LEFT);
-	drawBone(skel, NUI_SKELETON_POSITION_SHOULDER_CENTER, NUI_SKELETON_POSITION_SHOULDER_RIGHT);
-	drawBone(skel, NUI_SKELETON_POSITION_SHOULDER_CENTER, NUI_SKELETON_POSITION_SPINE);
-	drawBone(skel, NUI_SKELETON_POSITION_SPINE, NUI_SKELETON_POSITION_HIP_CENTER);
-	drawBone(skel, NUI_SKELETON_POSITION_HIP_CENTER, NUI_SKELETON_POSITION_HIP_LEFT);
-	drawBone(skel, NUI_SKELETON_POSITION_HIP_CENTER, NUI_SKELETON_POSITION_HIP_RIGHT);
-
-	// Left Arm
-	drawBone(skel, NUI_SKELETON_POSITION_SHOULDER_LEFT, NUI_SKELETON_POSITION_ELBOW_LEFT);
-	drawBone(skel, NUI_SKELETON_POSITION_ELBOW_LEFT, NUI_SKELETON_POSITION_WRIST_LEFT);
-	drawBone(skel, NUI_SKELETON_POSITION_WRIST_LEFT, NUI_SKELETON_POSITION_HAND_LEFT);
-
-	// Right Arm
-	drawBone(skel, NUI_SKELETON_POSITION_SHOULDER_RIGHT, NUI_SKELETON_POSITION_ELBOW_RIGHT);
-	drawBone(skel, NUI_SKELETON_POSITION_ELBOW_RIGHT, NUI_SKELETON_POSITION_WRIST_RIGHT);
-	drawBone(skel, NUI_SKELETON_POSITION_WRIST_RIGHT, NUI_SKELETON_POSITION_HAND_RIGHT);
-
-	// Left Leg
-	drawBone(skel, NUI_SKELETON_POSITION_HIP_LEFT, NUI_SKELETON_POSITION_KNEE_LEFT);
-	drawBone(skel, NUI_SKELETON_POSITION_KNEE_LEFT, NUI_SKELETON_POSITION_ANKLE_LEFT);
-	drawBone(skel, NUI_SKELETON_POSITION_ANKLE_LEFT, NUI_SKELETON_POSITION_FOOT_LEFT);
-
-	// Right Leg
-	drawBone(skel, NUI_SKELETON_POSITION_HIP_RIGHT, NUI_SKELETON_POSITION_KNEE_RIGHT);
-	drawBone(skel, NUI_SKELETON_POSITION_KNEE_RIGHT, NUI_SKELETON_POSITION_ANKLE_RIGHT);
-	drawBone(skel, NUI_SKELETON_POSITION_ANKLE_RIGHT, NUI_SKELETON_POSITION_FOOT_RIGHT);
-}
-
-void Scene::drawBone(NUI_SKELETON_DATA skel, NUI_SKELETON_POSITION_INDEX joint0, NUI_SKELETON_POSITION_INDEX joint1)
-{
-	//Get joint positions
-	int x1, y1, x2, y2;
-	float skeletonScale = 400.0f;
-	x1 = int(skeletonScale * skel.SkeletonPositions[joint0].x) + Constants::HALF_SCREEN_WIDTH;
-	y1 = -int(skeletonScale * skel.SkeletonPositions[joint0].y) + Constants::HALF_SCREEN_HEIGHT;
-	x2 = int(skeletonScale * skel.SkeletonPositions[joint1].x) + Constants::HALF_SCREEN_WIDTH;
-	y2 = -int(skeletonScale * skel.SkeletonPositions[joint1].y) + Constants::HALF_SCREEN_HEIGHT;
-
-	//Draw debug lines
-	SDL_RenderDrawLine(renderer, x1, y1, x2, y2);
 }
 
 

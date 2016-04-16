@@ -13,3 +13,5 @@ bool math::CircleCollision(Vector center1, Vector center2, float radius1, float 
 	float radiusSquare = math::square(radius1 + radius2);
 	return radiusSquare > distSquare;
 }
+
+Vector math::MakeVector(Vector4 v) { return Vector{ v.x, v.y }; }
