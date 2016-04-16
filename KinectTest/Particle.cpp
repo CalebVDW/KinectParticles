@@ -6,9 +6,10 @@ Particle::Particle()
 
 }
 
-Particle::Particle(float life, glm::vec3 color, Vector pos, Vector velocity)
+Particle::Particle(float life, glm::vec3 color, Vector pos, Vector velocity, Uint32 tailLength)
 	:lifeSpan{ life }, color{ color }, PhysicsActor{ Transform{ pos }, 1.0f, velocity }
 {
+	renderPositions = std::deque<Vector>(tailLength, Vector(10.0f, 10.0f));
 	renderRadius = 5;
 	age = 0;
 }
@@ -47,22 +48,34 @@ void Particle::update(float dt)
 	//Integration
 	PhysicsActor::update(dt);
 }
+
+//TODO//Fix queue code so that trail length is independent of frame rate
 void Particle::render(SDL_Renderer* renderer)
 {
-	//Convert to screen coordinates
-	SDL_Rect drawRect;
-	math::NdcToPixel(drawRect.x, drawRect.y, transform.Position());
+	//Update previous positions queue
+	renderPositions.push_front(transform.Position());
+	renderPositions.pop_back();
+	std::queue<Vector> tempQueue(renderPositions);
 
-	//Offset the drawrect so that it is centered over the Particle
-	drawRect.x -= renderRadius;
-	drawRect.y -= renderRadius;
+	//Render at each position in the trail
+	while(tempQueue.size() > 0)
+	{
+		//Convert to screen coordinates
+		SDL_Rect drawRect;
+		math::NdcToPixel(drawRect.x, drawRect.y, tempQueue.front());
+		tempQueue.pop();
 
-	drawRect.w = renderRadius * 2;
-	drawRect.h = renderRadius * 2;
+		//Offset the drawrect so that it is centered over the Particle
+		drawRect.x -= renderRadius;
+		drawRect.y -= renderRadius;
 
-	//Draw the rectangle
-	SDL_SetRenderDrawColor(renderer, convertColor(color.x), convertColor(color.y), convertColor(color.z), convertColor(alpha));
-	SDL_RenderDrawRect(renderer, &drawRect);
+		drawRect.w = renderRadius * 2;
+		drawRect.h = renderRadius * 2;
+
+		//Draw the rectangle
+		SDL_SetRenderDrawColor(renderer, convertColor(color.x), convertColor(color.y), convertColor(color.z), convertColor(alpha));
+		SDL_RenderDrawRect(renderer, &drawRect);
+	}
 }
 
 
