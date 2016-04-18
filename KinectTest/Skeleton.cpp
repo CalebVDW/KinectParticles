@@ -3,7 +3,34 @@
 Skeleton::Skeleton()
 	:Actor{ Transform() }, joints{ NUI_SKELETON_POSITION_COUNT, Skeleton::KinectJoint(Transform()) }
 {
+	//Create bones from joints
+	bones.push_back(KinectBone(joints, NUI_SKELETON_POSITION_HEAD, NUI_SKELETON_POSITION_SHOULDER_CENTER));
+	bones.push_back(KinectBone(joints, NUI_SKELETON_POSITION_SHOULDER_CENTER, NUI_SKELETON_POSITION_SHOULDER_LEFT));
+	bones.push_back(KinectBone(joints, NUI_SKELETON_POSITION_SHOULDER_CENTER, NUI_SKELETON_POSITION_SHOULDER_RIGHT));
+	bones.push_back(KinectBone(joints, NUI_SKELETON_POSITION_SHOULDER_CENTER, NUI_SKELETON_POSITION_SPINE));
+	bones.push_back(KinectBone(joints, NUI_SKELETON_POSITION_SPINE, NUI_SKELETON_POSITION_HIP_CENTER));
+	bones.push_back(KinectBone(joints, NUI_SKELETON_POSITION_HIP_CENTER, NUI_SKELETON_POSITION_HIP_LEFT));
+	bones.push_back(KinectBone(joints, NUI_SKELETON_POSITION_HIP_CENTER, NUI_SKELETON_POSITION_HIP_RIGHT));
 
+	//Left Arm
+	bones.push_back(KinectBone(joints, NUI_SKELETON_POSITION_SHOULDER_LEFT, NUI_SKELETON_POSITION_ELBOW_LEFT));
+	bones.push_back(KinectBone(joints, NUI_SKELETON_POSITION_ELBOW_LEFT, NUI_SKELETON_POSITION_WRIST_LEFT));
+	bones.push_back(KinectBone(joints, NUI_SKELETON_POSITION_WRIST_LEFT, NUI_SKELETON_POSITION_HAND_LEFT));
+
+	//Right Arm
+	bones.push_back(KinectBone(joints, NUI_SKELETON_POSITION_SHOULDER_RIGHT, NUI_SKELETON_POSITION_ELBOW_RIGHT));
+	bones.push_back(KinectBone(joints, NUI_SKELETON_POSITION_ELBOW_RIGHT, NUI_SKELETON_POSITION_WRIST_RIGHT));
+	bones.push_back(KinectBone(joints, NUI_SKELETON_POSITION_WRIST_RIGHT, NUI_SKELETON_POSITION_HAND_RIGHT));
+
+	//Left Leg
+	bones.push_back(KinectBone(joints, NUI_SKELETON_POSITION_HIP_LEFT, NUI_SKELETON_POSITION_KNEE_LEFT));
+	bones.push_back(KinectBone(joints, NUI_SKELETON_POSITION_KNEE_LEFT, NUI_SKELETON_POSITION_ANKLE_LEFT));
+	bones.push_back(KinectBone(joints, NUI_SKELETON_POSITION_ANKLE_LEFT, NUI_SKELETON_POSITION_FOOT_LEFT));
+
+	//Right Leg
+	bones.push_back(KinectBone(joints, NUI_SKELETON_POSITION_HIP_RIGHT, NUI_SKELETON_POSITION_KNEE_RIGHT));
+	bones.push_back(KinectBone(joints, NUI_SKELETON_POSITION_KNEE_RIGHT, NUI_SKELETON_POSITION_ANKLE_RIGHT));
+	bones.push_back(KinectBone(joints, NUI_SKELETON_POSITION_ANKLE_RIGHT, NUI_SKELETON_POSITION_FOOT_RIGHT));
 }
 
 
@@ -25,47 +52,77 @@ void Skeleton::Render(SDL_Renderer* renderer)
 	if (!active)
 		return;
 
-	drawBone(renderer, NUI_SKELETON_POSITION_HEAD, NUI_SKELETON_POSITION_SHOULDER_CENTER);
-	drawBone(renderer, NUI_SKELETON_POSITION_SHOULDER_CENTER, NUI_SKELETON_POSITION_SHOULDER_LEFT);
-	drawBone(renderer, NUI_SKELETON_POSITION_SHOULDER_CENTER, NUI_SKELETON_POSITION_SHOULDER_RIGHT);
-	drawBone(renderer, NUI_SKELETON_POSITION_SHOULDER_CENTER, NUI_SKELETON_POSITION_SPINE);
-	drawBone(renderer, NUI_SKELETON_POSITION_SPINE, NUI_SKELETON_POSITION_HIP_CENTER);
-	drawBone(renderer, NUI_SKELETON_POSITION_HIP_CENTER, NUI_SKELETON_POSITION_HIP_LEFT);
-	drawBone(renderer, NUI_SKELETON_POSITION_HIP_CENTER, NUI_SKELETON_POSITION_HIP_RIGHT);
-
-	//Left Arm
-	drawBone(renderer, NUI_SKELETON_POSITION_SHOULDER_LEFT, NUI_SKELETON_POSITION_ELBOW_LEFT);
-	drawBone(renderer, NUI_SKELETON_POSITION_ELBOW_LEFT, NUI_SKELETON_POSITION_WRIST_LEFT);
-	drawBone(renderer, NUI_SKELETON_POSITION_WRIST_LEFT, NUI_SKELETON_POSITION_HAND_LEFT);
-
-	//Right Arm
-	drawBone(renderer, NUI_SKELETON_POSITION_SHOULDER_RIGHT, NUI_SKELETON_POSITION_ELBOW_RIGHT);
-	drawBone(renderer, NUI_SKELETON_POSITION_ELBOW_RIGHT, NUI_SKELETON_POSITION_WRIST_RIGHT);
-	drawBone(renderer, NUI_SKELETON_POSITION_WRIST_RIGHT, NUI_SKELETON_POSITION_HAND_RIGHT);
-
-	//Left Leg
-	drawBone(renderer, NUI_SKELETON_POSITION_HIP_LEFT, NUI_SKELETON_POSITION_KNEE_LEFT);
-	drawBone(renderer, NUI_SKELETON_POSITION_KNEE_LEFT, NUI_SKELETON_POSITION_ANKLE_LEFT);
-	drawBone(renderer, NUI_SKELETON_POSITION_ANKLE_LEFT, NUI_SKELETON_POSITION_FOOT_LEFT);
-
-	//Right Leg
-	drawBone(renderer, NUI_SKELETON_POSITION_HIP_RIGHT, NUI_SKELETON_POSITION_KNEE_RIGHT);
-	drawBone(renderer, NUI_SKELETON_POSITION_KNEE_RIGHT, NUI_SKELETON_POSITION_ANKLE_RIGHT);
-	drawBone(renderer, NUI_SKELETON_POSITION_ANKLE_RIGHT, NUI_SKELETON_POSITION_FOOT_RIGHT);
+	for (KinectBone& bone : bones)
+	{
+		bone.Render(renderer);
+	}
 }
 
-void Skeleton::drawBone(SDL_Renderer* renderer, NUI_SKELETON_POSITION_INDEX joint0, NUI_SKELETON_POSITION_INDEX joint1)
+void Skeleton::ResolveCollisions(ParticleArray<Particle>& particles)
+{
+	for (KinectBone& bone : bones)
+	{
+		for (int i = 0; i < particles.Size(); ++i)
+		{
+			bone.ResolveCollision(particles[i]);
+		}
+	}
+}
+
+
+void Skeleton::Deactivate() { active = false; }
+
+
+//KINECT BONE DEFINITIONS//////////////////////////////////////////////////////////////////////////
+Skeleton::KinectBone::KinectBone(std::vector<KinectJoint> joints, NUI_SKELETON_POSITION_INDEX jointIndex0, NUI_SKELETON_POSITION_INDEX jointIndex1)
+	:joint0{ joints[jointIndex0] }, joint1{ joints[jointIndex1] }
+{
+}
+
+void Skeleton::KinectBone::Render(SDL_Renderer* renderer)
 {
 	//Get joint positions
 	int x1, y1, x2, y2;
 	float skeletonScale = 400.0f;
-	x1 = int(skeletonScale * joints[joint0].GetTransform().Position().x) + Constants::HALF_SCREEN_WIDTH;
-	y1 = -int(skeletonScale * joints[joint0].GetTransform().Position().y) + Constants::HALF_SCREEN_HEIGHT;
-	x2 = int(skeletonScale * joints[joint1].GetTransform().Position().x) + Constants::HALF_SCREEN_WIDTH;
-	y2 = -int(skeletonScale * joints[joint1].GetTransform().Position().y) + Constants::HALF_SCREEN_HEIGHT;
+	x1 = int(skeletonScale * joint0.GetTransform().Position().x) + Constants::HALF_SCREEN_WIDTH;
+	y1 = -int(skeletonScale * joint0.GetTransform().Position().y) + Constants::HALF_SCREEN_HEIGHT;
+	x2 = int(skeletonScale * joint1.GetTransform().Position().x) + Constants::HALF_SCREEN_WIDTH;
+	y2 = -int(skeletonScale * joint1.GetTransform().Position().y) + Constants::HALF_SCREEN_HEIGHT;
 
 	//Draw debug lines
 	SDL_RenderDrawLine(renderer, x1, y1, x2, y2);
 }
 
-void Skeleton::Deactivate() { active = false; }
+bool Skeleton::KinectBone::ResolveCollision(Particle& particle)
+{
+	//Determine if intersection occurred 
+	Vector p0 = joint0.GetTransform().Position();
+	Vector p1 = joint1.GetTransform().Position();
+	Vector boneDirection = p1 - p0;
+	Vector normal = glm::normalize(Vector(boneDirection.y, -boneDirection.x));
+
+	float k = glm::dot(normal, joint0.GetTransform().Position());
+
+	Vector b = particle.GetTransform().Position();
+	Vector a = particle.PreviousPosition();
+
+	if ((glm::dot(normal, a) - k) * (glm::dot(normal, b) - k) > 0)
+		return false;	//a and b are on the same side of the line so there was no intersection
+
+	//Potential intersection detected. Determine point of intersection 
+	float collisionDepth = (k - glm::dot(normal, a)) / (glm::dot(b - a, normal));		//Don't know what to call this variable. It's how far between a and b the collision takes place
+	Vector intersectionPoint = collisionDepth * (b - a) + a;
+	if (glm::dot(intersectionPoint, boneDirection) > glm::dot(p1, boneDirection))
+		return false;
+
+	//Calculate impulse to apply to particle
+	Vector impulse = normal * glm::dot(normal, particle.Velocity()) * -2.0f * particle.Mass();
+	if (glm::dot(particle.Velocity(), normal) > 0)
+	{
+		impulse = -impulse;
+	}
+	particle.ApplyImpulse(impulse);
+
+	//Clearly we made it this far so something must have collided. Let's inform the caller of this
+	return true;
+}

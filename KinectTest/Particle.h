@@ -31,7 +31,9 @@ public:
 	//Physics interface is made public for particles
 	void ApplyForce(Vector f);
 	void ApplyImpulse(Vector f);
+	void SetPosition(Vector p);
 	void MarkForDelete();
+	Vector PreviousPosition() const;
 
 	//Const interface
 	bool IsAlive() const;
@@ -43,6 +45,9 @@ private:
 	float alpha;
 	int renderRadius;
 	std::deque<Vector> renderPositions;
+
+	//Physics data
+	Vector previousPosition;
 
 	//Creation destruction stuff
 	float lifeSpan;
