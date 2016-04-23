@@ -5,6 +5,7 @@
 #include <SDL.h>
 
 #include "Scene.h"
+#include "Sprite.h"
 
 //TODO/////////////////////////////////////////////////////////////////////////
 //Determine inheritance hierarchy for this project
@@ -31,6 +32,10 @@ bool init(SDL_Window** window, SDL_Renderer** renderer)
 	*window = SDL_CreateWindow("StackOverflow", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, Constants::SCREEN_WIDTH, Constants::SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
 	*renderer = SDL_CreateRenderer(*window, -1, SDL_RENDERER_ACCELERATED);
 	SDL_SetRenderDrawColor(*renderer, 0, 0, 0, 255);
+
+	//Initialize SDL_Image
+	Sprite::windowSurface = SDL_GetWindowSurface(*window);
+	Sprite::Initialize();
 
 	return true;
 }

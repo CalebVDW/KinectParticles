@@ -31,6 +31,7 @@ namespace math
 	}
 	//Converts NDC (physics/kinect space) to pixel coords for rendering with SDL
 	void NdcToPixel(int& x, int& y, Vector pos);
+	void NdcToPixel(float& x, float& y, Vector pos);
 	//Determines if 2 circles are intersecting
 	bool CircleCollision(Vector center1, Vector center2, float radius1, float radius2);
 
