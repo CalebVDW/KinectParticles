@@ -2,10 +2,15 @@
 #include "Scene.h"
 
 
-Scene::Scene(bool withoutSensor)
+Scene::Scene(SDL_Renderer* renderer, bool withoutSensor)
 	:particles{ Constants::MAX_PARTICLES }, noSensor{ withoutSensor }
 {
 	dataCollection = noSensor ? &Scene::getMouseData : &Scene::getSensorData;
+
+	//Load resources
+	StaticResources::Initialize(renderer);
+	std::string spriteDir = "../KinectTest/Sprites";
+	StaticResources::LoadPNG(spriteDir, "dot.png");
 
 	//Create stuff here
 	currentTime = SDL_GetPerformanceCounter();

@@ -1,13 +1,13 @@
 #include "Particle.h"
 
 Particle::Particle()
-	:lifeSpan{ 1.0f }, color{ glm::vec3(1.0f) }, PhysicsActor{ Transform(), 1.0f }
+	:lifeSpan{ 1.0f }, color{ glm::vec3(1.0f) }, PhysicsActor{ Transform(), 1.0f }, sprite{ "dot", 16, 16 }
 {
 
 }
 
 Particle::Particle(float life, glm::vec3 color, Vector pos, Vector velocity, Uint32 tailLength)
-	:lifeSpan{ life }, color{ color }, PhysicsActor{ Transform{ pos }, 1.0f, velocity }
+	: lifeSpan{ life }, color{ color }, PhysicsActor{ Transform{ pos }, 1.0f, velocity }, sprite{ "dot", 16, 16 }
 {
 	renderPositions = std::deque<Vector>(tailLength, Vector(10.0f, 10.0f));
 	renderRadius = 5;
@@ -60,21 +60,9 @@ void Particle::Render(SDL_Renderer* renderer)
 	//Render at each position in the trail
 	while(tempQueue.size() > 0)
 	{
-		//Convert to screen coordinates
-		SDL_Rect drawRect;
-		math::NdcToPixel(drawRect.x, drawRect.y, tempQueue.front());
+		//Render a sprite at the current position and remove that position from the queue
+		sprite.Render(renderer, tempQueue.front());
 		tempQueue.pop();
-
-		//Offset the drawrect so that it is centered over the Particle
-		drawRect.x -= renderRadius;
-		drawRect.y -= renderRadius;
-
-		drawRect.w = renderRadius * 2;
-		drawRect.h = renderRadius * 2;
-
-		//Draw the rectangle
-		SDL_SetRenderDrawColor(renderer, convertColor(color.x), convertColor(color.y), convertColor(color.z), convertColor(alpha));
-		SDL_RenderDrawRect(renderer, &drawRect);
 	}
 }
 

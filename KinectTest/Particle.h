@@ -1,13 +1,13 @@
 #pragma once
 
-#include "Constants.h"
-#include "PhysicsActor.h"
-
 #include <SDL.h>
 #include <deque>
 #include <queue>
-
 #include <glm\glm.hpp>
+
+#include "Constants.h"
+#include "PhysicsActor.h"
+#include "Sprite.h"
 
 Uint8 inline convertColor(float a)
 {
@@ -43,6 +43,7 @@ private:
 	float alpha;
 	int renderRadius;
 	std::deque<Vector> renderPositions;
+	Sprite sprite;
 
 	//Creation destruction stuff
 	float lifeSpan;

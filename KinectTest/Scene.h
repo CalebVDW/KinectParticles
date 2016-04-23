@@ -18,7 +18,7 @@
 class Scene
 {
 public:
-	Scene(bool withoutSensor = false);
+	Scene(SDL_Renderer* renderer, bool withoutSensor = false);
 	~Scene();
 
 	void Update(NUI_SKELETON_FRAME* frame);
