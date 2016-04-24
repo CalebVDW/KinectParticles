@@ -18,9 +18,9 @@ void Sprite::Render(SDL_Renderer* renderer, Vector center)
 void Sprite::Render(SDL_Renderer* renderer, Vector center, float rotation, glm::vec2 scale)
 {
 	SDL_Rect destRect = calculateDrawRect(center);
-	SDL_Point center;
-	math::NdcToPixel(center.x, center.y, center);
-	SDL_RenderCopyEx(renderer, texture, NULL, &destRect, rotation, )
+	SDL_Point centerPoint;
+	math::NdcToPixel(centerPoint.x, centerPoint.y, center);
+	SDL_RenderCopyEx(renderer, texture, NULL, &destRect, rotation, &centerPoint, SDL_FLIP_NONE);
 }
 
 SDL_Rect Sprite::calculateDrawRect(Vector center)

@@ -99,6 +99,7 @@
     <ClCompile Include="Skeleton.cpp" />
     <ClCompile Include="Source.cpp" />
     <ClCompile Include="Sprite.cpp" />
+    <ClCompile Include="StaticResources.cpp" />
     <ClCompile Include="Target.cpp" />
     <ClCompile Include="Transform.cpp" />
   </ItemGroup>

@@ -34,8 +34,8 @@ bool init(SDL_Window** window, SDL_Renderer** renderer)
 	SDL_SetRenderDrawColor(*renderer, 0, 0, 0, 255);
 
 	//Initialize SDL_Image
-	Sprite::windowSurface = SDL_GetWindowSurface(*window);
-	Sprite::Initialize();
+	StaticResources::windowSurface = SDL_GetWindowSurface(*window);
+	StaticResources::Initialize(*renderer);
 
 	return true;
 }
@@ -57,7 +57,7 @@ int main(int argc, char** argv){
 	if (sensorCount < 1)
 	{
 		std::cout << "No sensor detected. Running with mouse input" << std::endl;
-		Scene mouseScene(true);
+		Scene mouseScene(renderer, true);
 
 		//Run without sensor here
 		while (true)
@@ -108,7 +108,7 @@ int main(int argc, char** argv){
 	}
 
 	//Initialize scene
-	Scene myScene;
+	Scene myScene(renderer);
 
 	//RUN WITH SENSOR HERE///////////////////////////////////////////////////////////////////////////
 

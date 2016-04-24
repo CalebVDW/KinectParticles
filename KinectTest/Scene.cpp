@@ -9,8 +9,8 @@ Scene::Scene(SDL_Renderer* renderer, bool withoutSensor)
 
 	//Load resources
 	StaticResources::Initialize(renderer);
-	std::string spriteDir = "../KinectTest/Sprites";
-	StaticResources::LoadPNG(spriteDir, "dot.png");
+	std::string spriteDir = "Sprites/dot.png";
+	StaticResources::LoadPNG(spriteDir, "dot");
 
 	//Create stuff here
 	currentTime = SDL_GetPerformanceCounter();
