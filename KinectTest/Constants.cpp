@@ -10,6 +10,11 @@ void math::NdcToPixel(float& x, float& y, Vector pos)
 	x = Constants::FLT_HALF_SCREEN_WIDTH * pos.x + Constants::FLT_HALF_SCREEN_WIDTH;
 	y = -Constants::FLT_HALF_SCREEN_HEIGHT * pos.y + Constants::FLT_HALF_SCREEN_HEIGHT;
 }
+void math::PixelToNdc(Vector& result, int x, int y)
+{
+	result.x = (float(x) - Constants::FLT_HALF_SCREEN_WIDTH) / Constants::FLT_HALF_SCREEN_WIDTH;
+	result.y = (float(y) - Constants::FLT_HALF_SCREEN_HEIGHT) / -Constants::FLT_HALF_SCREEN_HEIGHT;
+}
 //Determines if 2 circles are intersecting
 bool math::CircleCollision(Vector center1, Vector center2, float radius1, float radius2)
 {

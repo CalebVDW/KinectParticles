@@ -69,7 +69,22 @@ void Scene::Update(NUI_SKELETON_FRAME* frame)
 
 void Scene::getMouseData()
 {
+	//Poll SDL mouse events
+	SDL_Event mouseEvent;
+	SDL_PollEvent(&mouseEvent);
 
+	//Get mouse position
+	int x, y;
+	Vector mousePos;
+	SDL_GetMouseState(&x, &y);
+	math::PixelToNdc(mousePos, x, y);
+	std::cout << mousePos.x << ", " << mousePos.y << std::endl;
+
+	//Apply force to particles based on mouse position
+	for (int i = 0; i < particles.Size(); ++i)
+	{
+		particles[i].ApplyForce(ForceFunctions::Gravity(particles[i], mousePos) * 4.0f);
+	}
 }
 
 void Scene::getSensorData()
