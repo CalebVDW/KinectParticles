@@ -16,7 +16,7 @@ Scene::Scene(SDL_Renderer* renderer, bool withoutSensor)
 	currentTime = SDL_GetPerformanceCounter();
 
 	//Emitters
-	emitters.push_back(Emitter(Transform(Vector(-1.0f, 0)), Vector(1.0f, 0), 10.0f, 0.5f));
+	emitters.push_back(Emitter(Transform(Vector(-1.0f, 0)), Vector(1.0f, 0), 5.0f, 1.0f));
 
 	//Targets
 	targets.push_back(Target(Transform(Vector(0, 0.8f)), 0.1f));

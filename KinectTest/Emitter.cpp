@@ -16,7 +16,7 @@ void Emitter::Update(float dt)
 void Emitter::AddParticle(ParticleArray<Particle>& pArray)
 {
 	if (particleReady)
-		pArray.Push(Particle(2.0f, color, transform.Position(), speed * direction));
+		pArray.Push(Particle(2.0f, color, transform.Position(), speed * direction, 50U));
 	particleReady = false;
 }
 

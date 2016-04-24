@@ -16,10 +16,15 @@ public:
 	void Render(SDL_Renderer* renderer, Vector center);
 	void Render(SDL_Renderer* renderer, Vector center, float rotation, glm::vec2 scale = glm::vec2());
 
+	void SetTint(glm::vec3 pTint);
+	void SetAlpha(float pAlpha);
+
 private:
 	SDL_Texture* texture;
 	int width;
 	int height;
+	float alpha;
+	glm::vec3 tint;
 
 	SDL_Rect calculateDrawRect(Vector center);
 };

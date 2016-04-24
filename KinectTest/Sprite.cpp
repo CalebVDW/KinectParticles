@@ -5,6 +5,8 @@
 Sprite::Sprite(std::string textureName, int width, int height)
 	:texture{ StaticResources::GetTexture(textureName) }, width{ width }, height{ height }
 {
+	alpha = 1.0f;
+	tint = glm::vec3(255.0f);
 }
 
 void Sprite::Render(SDL_Renderer* renderer, Vector center)
@@ -23,6 +25,18 @@ void Sprite::Render(SDL_Renderer* renderer, Vector center, float rotation, glm::
 	SDL_RenderCopyEx(renderer, texture, NULL, &destRect, rotation, &centerPoint, SDL_FLIP_NONE);
 }
 
+void Sprite::SetAlpha(float pAlpha) 
+{ 
+	alpha = pAlpha;
+	SDL_SetTextureColorMod(texture, Uint8(alpha * tint.x), Uint8(alpha * tint.y), Uint8(alpha * tint.z));
+}
+void Sprite::SetTint(glm::vec3 pTint) 
+{
+	tint = pTint * 255.0f;
+	SDL_SetTextureColorMod(texture, Uint8(alpha * tint.x), Uint8(alpha * tint.y), Uint8(alpha * tint.z));
+}
+
+//PRIVATE FUNCTIONS////////////////////////////////////////////////////////////
 SDL_Rect Sprite::calculateDrawRect(Vector center)
 {
 	//Convert from NDC to screen coords

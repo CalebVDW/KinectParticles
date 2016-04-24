@@ -60,6 +60,10 @@ void Particle::Render(SDL_Renderer* renderer)
 	//Render at each position in the trail
 	while(tempQueue.size() > 0)
 	{
+		//Adjust alpha value of the sprite
+		float trailScalar = float(tempQueue.size()) / float(renderPositions.size());
+		sprite.SetAlpha(trailScalar);
+		sprite.SetTint(glm::vec3(trailScalar, 1.0f, trailScalar));
 		//Render a sprite at the current position and remove that position from the queue
 		sprite.Render(renderer, tempQueue.front());
 		tempQueue.pop();
