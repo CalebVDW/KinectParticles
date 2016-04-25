@@ -6,13 +6,7 @@ Scene::Scene(SDL_Renderer* renderer, bool withoutSensor)
 	:particles{ Constants::MAX_PARTICLES }, noSensor{ withoutSensor }
 {
 	dataCollection = noSensor ? &Scene::getMouseData : &Scene::getSensorData;
-
-	//Load resources
-	StaticResources::Initialize(renderer);
-	std::string spriteDir = "Sprites/dot.png";
-	StaticResources::LoadPNG(spriteDir, "dot");
-
-	//Create stuff here
+	loadAssets();
 	currentTime = SDL_GetPerformanceCounter();
 
 	//Emitters
@@ -22,6 +16,28 @@ Scene::Scene(SDL_Renderer* renderer, bool withoutSensor)
 	targets.push_back(Target(Transform(Vector(0, 0.8f)), 0.1f));
 }
 
+Scene::Scene(SDL_Renderer* renderer, std::string mapFilePath, bool withoutSensor)
+	:particles{ Constants::MAX_PARTICLES }, noSensor{ withoutSensor }
+{
+	dataCollection = noSensor ? &Scene::getMouseData : &Scene::getSensorData;
+	loadAssets();
+	currentTime = SDL_GetPerformanceCounter();
+	parseMapFile(mapFilePath);
+}
+
+void Scene::loadAssets()
+{
+	StaticResources::Initialize(renderer);
+	std::string spriteDir = "Sprites/dot.png";
+	StaticResources::LoadPNG(spriteDir, "dot");
+}
+
+void Scene::parseMapFile(std::string path)
+{
+	//Parse each line of the file
+
+	//Create the object specified at that line
+}
 
 //Apply forces, resolve collisions, etc.
 void Scene::Update(NUI_SKELETON_FRAME* frame)

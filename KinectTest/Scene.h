@@ -2,6 +2,7 @@
 
 #include <list>
 #include <vector>
+#include <string>
 
 #include "Constants.h"
 #include "Particle.h"
@@ -19,6 +20,7 @@ class Scene
 {
 public:
 	Scene(SDL_Renderer* renderer, bool withoutSensor = false);
+	Scene(SDL_Renderer* renderer, std::string mapFilePath, bool withoutSensor = false);
 	~Scene();
 
 	void Update(NUI_SKELETON_FRAME* frame);
@@ -48,5 +50,10 @@ private:
 
 	//Time keeping
 	long long currentTime, previousTime;
+
+	//Helper functions
+	void loadAssets();
+	void parseMapFile(std::string path);
+
 };
 
