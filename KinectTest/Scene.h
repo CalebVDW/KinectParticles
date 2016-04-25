@@ -54,6 +54,9 @@ private:
 	//Helper functions
 	void loadAssets();
 	void parseMapFile(std::string path);
+	void parseEmitterLine(std::string line);
+	void parseTargetLine(std::string line);
+	float popNextFloat(std::string& line);
 
 };
 

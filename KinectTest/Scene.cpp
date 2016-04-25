@@ -1,4 +1,5 @@
 #include <iostream>
+#include <fstream>
 #include "Scene.h"
 
 
@@ -34,9 +35,96 @@ void Scene::loadAssets()
 
 void Scene::parseMapFile(std::string path)
 {
-	//Parse each line of the file
+	//Step through each line of the file
+	std::string line;
+	std::ifstream file(path);
+	if (file.is_open())
+	{
+		while (getline(file, line))
+		{
+			//Check the first word of each line to see what kind of object to make
+			if (line.find("Emitter", 0) == 0)
+				parseEmitterLine(line);
+			else if (line.find("Target", 0) == 0)
+				parseTargetLine(line);
+		}
+		file.close();
+	}
+	else
+		std::cout << "Can't open file" << std::endl;
+
 
 	//Create the object specified at that line
+}
+
+void Scene::parseEmitterLine(std::string line)
+{
+	//Position, direction, rate, speed
+	//Emitter: float float, float float, float, float 
+
+	//Erase emitter at the beginning
+	int i = line.find(" ", 0);
+	if (i = std::string::npos)
+		return;
+	line.erase(0, i + 1);
+
+	//Get position
+	Vector position;
+	position.x = popNextFloat(line);
+	position.y = popNextFloat(line);
+
+	//Get direction
+	Vector direction;
+	direction.x = popNextFloat(line);
+	direction.y = popNextFloat(line);
+
+	//Get rate
+	float rate = popNextFloat(line);
+
+	//Get speed
+	float speed = popNextFloat(line);
+
+	emitters.push_back(Emitter(Transform(position), direction, rate, speed));
+
+}
+
+void Scene::parseTargetLine(std::string line)
+{
+	//Position, radius, inverseMass, velocity
+	//Target: float float, float, float, float float 
+
+	//Erase emitter at the beginning
+	int i = line.find(" ", 0);
+	if (i = std::string::npos)
+		return;
+	line.erase(0, i + 1);
+
+	//Get position
+	Vector position;
+	position.x = popNextFloat(line);
+	position.y = popNextFloat(line);
+
+	//Get rate
+	float radius = popNextFloat(line);
+
+	//Get speed
+	float inverseMass = popNextFloat(line);
+
+	//Get velocity
+	Vector velocity;
+	velocity.x = popNextFloat(line);
+	velocity.y = popNextFloat(line);
+
+	targets.push_back(Target(Transform(position), radius, inverseMass, velocity));
+}
+
+float Scene::popNextFloat(std::string& line)
+{
+	float result = std::stof(line, 0);
+	int i = line.find(" ");
+	if (i != std::string::npos)
+		line.erase(0, i + 1);
+	return result;
 }
 
 //Apply forces, resolve collisions, etc.
