@@ -20,6 +20,8 @@ void Sprite::Render(SDL_Renderer* renderer, Vector center)
 void Sprite::Render(SDL_Renderer* renderer, Vector center, float rotation, glm::vec2 scale)
 {
 	SDL_Rect destRect = calculateDrawRect(center);
+	destRect.w = int(scale.x * float(destRect.w));
+	destRect.h = int(scale.y * float(destRect.h));
 	SDL_Point centerPoint;
 	math::NdcToPixel(centerPoint.x, centerPoint.y, center);
 	SDL_RenderCopyEx(renderer, texture, NULL, &destRect, rotation, &centerPoint, SDL_FLIP_NONE);
@@ -35,7 +37,11 @@ void Sprite::SetTint(glm::vec3 pTint)
 	tint = pTint * 255.0f;
 	SDL_SetTextureColorMod(texture, Uint8(alpha * tint.x), Uint8(alpha * tint.y), Uint8(alpha * tint.z));
 }
-
+void Sprite::SetSize(int width, int height)
+{
+	this->width = width;
+	this->height = height;
+}
 //PRIVATE FUNCTIONS////////////////////////////////////////////////////////////
 SDL_Rect Sprite::calculateDrawRect(Vector center)
 {
