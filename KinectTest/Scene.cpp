@@ -78,7 +78,6 @@ void Scene::getMouseData()
 	Vector mousePos;
 	SDL_GetMouseState(&x, &y);
 	math::PixelToNdc(mousePos, x, y);
-	std::cout << mousePos.x << ", " << mousePos.y << std::endl;
 
 	//Apply force to particles based on mouse position
 	for (int i = 0; i < particles.Size(); ++i)
