@@ -9,15 +9,8 @@ Scene::Scene(SDL_Renderer* renderer, SDL_Texture* targetTexture, bool withoutSen
 	SDL_SetRenderTarget(renderer, targetTexture);
 	SDL_SetTextureBlendMode(targetTexture, SDL_BLENDMODE_BLEND);
 	loadAssets();	
-
-	//Create stuff here
+	buildDefaultLevel();
 	currentTime = SDL_GetPerformanceCounter();
-
-	//Emitters
-	emitters.push_back(Emitter(Transform(Vector(-1.0f, 0)), Vector(1.0f, 0), 5.0f, 1.0f));
-
-	//Targets
-	targets.push_back(Target(Transform(Vector(0, 0.8f)), 0.1f));
 }
 
 Scene::Scene(SDL_Renderer* renderer, SDL_Texture* targetTexture, std::string mapFilePath, bool withoutSensor)
@@ -28,12 +21,22 @@ Scene::Scene(SDL_Renderer* renderer, SDL_Texture* targetTexture, std::string map
 	SDL_SetTextureBlendMode(targetTexture, SDL_BLENDMODE_BLEND);
 	loadAssets();
 	parseMapFile(mapFilePath);
+	currentTime = SDL_GetPerformanceCounter();
 }
 
 void Scene::loadAssets()
 {
 	std::string spriteDir = "Sprites/dot.png";
 	StaticResources::LoadPNG(spriteDir, "dot");
+}
+
+void Scene::buildDefaultLevel()
+{
+	//Emitters
+	emitters.push_back(Emitter(Transform(Vector(-1.0f, 0)), Vector(1.0f, 0), 5.0f, 1.0f));
+
+	//Targets
+	targets.push_back(Target(Transform(Vector(0, 0.8f)), 0.1f));
 }
 
 void Scene::parseMapFile(std::string path)
@@ -54,7 +57,10 @@ void Scene::parseMapFile(std::string path)
 		file.close();
 	}
 	else
+	{
 		std::cout << "Can't open file" << std::endl;
+		buildDefaultLevel();
+	}
 }
 
 void Scene::parseEmitterLine(std::string line)

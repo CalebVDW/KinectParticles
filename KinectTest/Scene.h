@@ -52,6 +52,7 @@ private:
 
 	//Helper functions
 	void loadAssets();
+	void buildDefaultLevel();
 	void parseMapFile(std::string path);
 	void parseEmitterLine(std::string line);
 	void parseTargetLine(std::string line);

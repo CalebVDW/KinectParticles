@@ -57,6 +57,7 @@ int main(int argc, char** argv){
 	std::string mapName;
 	std::string mapDir = "Maps/";
 	std::cin >> mapName;
+	std::string fullPath = mapDir + mapName + ".txt";
 
 	//Check if there is a sensor
 	int sensorCount = 0;
@@ -64,7 +65,7 @@ int main(int argc, char** argv){
 	if (sensorCount < 1)
 	{
 		std::cout << "No sensor detected. Running with mouse input" << std::endl;
-		Scene mouseScene(renderer, targetTexture, true);
+		Scene mouseScene(renderer, targetTexture, fullPath, true);
 
 		//Run without sensor here
 		while (true)
@@ -115,7 +116,7 @@ int main(int argc, char** argv){
 	}
 
 	//Initialize scene
-	Scene myScene(renderer,targetTexture);
+	Scene myScene(renderer, targetTexture, fullPath);
 
 	//RUN WITH SENSOR HERE///////////////////////////////////////////////////////////////////////////
 
