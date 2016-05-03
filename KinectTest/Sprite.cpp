@@ -5,6 +5,7 @@
 Sprite::Sprite(std::string textureName, int width, int height)
 	:texture{ StaticResources::GetTexture(textureName) }, width{ width }, height{ height }
 {
+	SDL_SetTextureBlendMode(texture, SDL_BLENDMODE_BLEND);
 	alpha = 1.0f;
 	tint = glm::vec3(255.0f);
 }

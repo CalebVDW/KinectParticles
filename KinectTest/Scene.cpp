@@ -2,13 +2,14 @@
 #include "Scene.h"
 
 
-Scene::Scene(SDL_Renderer* renderer, bool withoutSensor)
-	:particles{ Constants::MAX_PARTICLES }, noSensor{ withoutSensor }
+Scene::Scene(SDL_Renderer* renderer, SDL_Texture* targetTexture, bool withoutSensor)
+	:particles{ Constants::MAX_PARTICLES }, renderer{ renderer }, targetTexture { targetTexture }, noSensor{ withoutSensor }
 {
 	dataCollection = noSensor ? &Scene::getMouseData : &Scene::getSensorData;
+	SDL_SetRenderTarget(renderer, targetTexture);
+	SDL_SetTextureBlendMode(targetTexture, SDL_BLENDMODE_BLEND);
 
 	//Load resources
-	StaticResources::Initialize(renderer);
 	std::string spriteDir = "Sprites/dot.png";
 	StaticResources::LoadPNG(spriteDir, "dot");
 
@@ -117,7 +118,7 @@ void Scene::getSensorData()
 //Draw everything
 void Scene::Render(SDL_Renderer* r)
 {
-	renderer = r;
+	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
 	SDL_RenderClear(renderer);
 	//Draw particles
 	for (int i = 0; i < particles.Size(); ++i)
@@ -136,7 +137,8 @@ void Scene::Render(SDL_Renderer* r)
 	player0.Render(renderer);
 	player1.Render(renderer);
 
-	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
+	SDL_SetRenderTarget(renderer, NULL);
 	SDL_RenderPresent(renderer);
 }
 

@@ -18,9 +18,10 @@
 //Globals because I'm a lazy bastard
 SDL_Window* window = nullptr;
 SDL_Renderer* renderer = nullptr;
+SDL_Texture* targetTexture = nullptr;
 
 //Initializes SDL only
-bool init(SDL_Window** window, SDL_Renderer** renderer)
+bool init(SDL_Window** window, SDL_Renderer** renderer, SDL_Texture** targetTex)
 {
 	if (SDL_Init(SDL_INIT_EVERYTHING) < 0)
 	{
@@ -30,12 +31,12 @@ bool init(SDL_Window** window, SDL_Renderer** renderer)
 
 	//Initialize window
 	*window = SDL_CreateWindow("StackOverflow", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, Constants::SCREEN_WIDTH, Constants::SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
-	*renderer = SDL_CreateRenderer(*window, -1, SDL_RENDERER_ACCELERATED);
-	SDL_SetRenderDrawColor(*renderer, 0, 0, 0, 255);
+	*renderer = SDL_CreateRenderer(*window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_TARGETTEXTURE);
+	*targetTex = SDL_CreateTexture(*renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_TARGET, Constants::SCREEN_WIDTH, Constants::SCREEN_HEIGHT);
+	SDL_SetRenderDrawColor(*renderer, 0, 0, 0, 0);
 
 	//Initialize SDL_Image
-	StaticResources::windowSurface = SDL_GetWindowSurface(*window);
-	StaticResources::Initialize(*renderer);
+	StaticResources::Initialize(*renderer, *window);
 
 	return true;
 }
@@ -49,7 +50,7 @@ int main(int argc, char** argv){
 	std::cout << "Hello World!" << std::endl;
 
 	//Initialize SDL
-	init(&window, &renderer);
+	init(&window, &renderer, &targetTexture);
 
 	//Check if there is a sensor
 	int sensorCount = 0;
@@ -57,7 +58,7 @@ int main(int argc, char** argv){
 	if (sensorCount < 1)
 	{
 		std::cout << "No sensor detected. Running with mouse input" << std::endl;
-		Scene mouseScene(renderer, true);
+		Scene mouseScene(renderer, targetTexture, true);
 
 		//Run without sensor here
 		while (true)
@@ -108,7 +109,7 @@ int main(int argc, char** argv){
 	}
 
 	//Initialize scene
-	Scene myScene(renderer);
+	Scene myScene(renderer,targetTexture);
 
 	//RUN WITH SENSOR HERE///////////////////////////////////////////////////////////////////////////
 

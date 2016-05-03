@@ -9,7 +9,7 @@ class StaticResources {
 public:
 	static SDL_Surface* windowSurface;
 	static SDL_Renderer* renderer;
-	static void Initialize(SDL_Renderer* r);
+	static void Initialize(SDL_Renderer* r, SDL_Window* window);
 	static void LoadPNG(std::string path, std::string spriteName);
 	static SDL_Texture* GetTexture(std::string name);
 

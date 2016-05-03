@@ -22,7 +22,7 @@ class Particle : public PhysicsActor
 {
 public:
 	Particle();
-	Particle(float lifeSpan, glm::vec3 color, Vector pos, Vector velocity, Uint32 tailLength = 100);
+	Particle(float lifeSpan, glm::vec3 color, Vector pos, Vector velocity, float tailLength = 1.0f);
 	virtual ~Particle();
 
 	void Update(float dt);
@@ -42,7 +42,9 @@ private:
 	glm::vec3 color;
 	float alpha;
 	int renderRadius;
-	std::deque<Vector> renderPositions;
+	float tailLength;
+	float maxTailLength;
+	std::deque<std::pair<Vector, float>> renderPositions;
 	Sprite sprite;
 
 	//Creation destruction stuff
