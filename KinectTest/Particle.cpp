@@ -3,13 +3,14 @@
 Particle::Particle()
 	:lifeSpan{ 1.0f }, color{ glm::vec3(1.0f) }, PhysicsActor{ Transform(), 1.0f }, sprite{ "dot", 16, 16 }
 {
-
+	tailLength = 0;
+	maxTailLength = 1.0f;
 }
 
-Particle::Particle(float life, glm::vec3 color, Vector pos, Vector velocity, Uint32 tailLength)
-	: lifeSpan{ life }, color{ color }, PhysicsActor{ Transform{ pos }, 1.0f, velocity }, sprite{ "dot", 16, 16 }
+Particle::Particle(float life, glm::vec3 color, Vector pos, Vector velocity, float tailLength)
+	: lifeSpan{ life }, color{ color }, PhysicsActor{ Transform{ pos }, 1.0f, velocity }, sprite{ "dot", 16, 16 }, maxTailLength{ tailLength }
 {
-	renderPositions = std::deque<Vector>(tailLength, Vector(10.0f, 10.0f));
+	this->tailLength = 0;
 	renderRadius = 5;
 	age = 0;
 }
@@ -47,15 +48,23 @@ void Particle::Update(float dt)
 
 	//Integration
 	PhysicsActor::Update(dt);
+
+	//Add current position to front of tail
+	renderPositions.push_front(std::pair<Vector, float>(transform.Position(), dt));
+	tailLength += dt;
+	//Pop positions from the back of the tail if it is too long
+	while (tailLength > maxTailLength)
+	{
+		tailLength -= renderPositions.back().second;
+		renderPositions.pop_back();
+	}
 }
 
 //TODO//Fix queue code so that trail length is independent of frame rate
 void Particle::Render(SDL_Renderer* renderer)
 {
-	//Update previous positions queue
-	renderPositions.push_front(transform.Position());
-	renderPositions.pop_back();
-	std::queue<Vector> tempQueue(renderPositions);
+	//Render positions is expected to contain all the correct positions at this point
+	std::queue<std::pair<Vector, float>> tempQueue(renderPositions);
 
 	//Render at each position in the trail
 	while(tempQueue.size() > 0)
@@ -65,7 +74,7 @@ void Particle::Render(SDL_Renderer* renderer)
 		sprite.SetAlpha(trailScalar);
 		sprite.SetTint(glm::vec3(trailScalar, 1.0f, trailScalar));
 		//Render a sprite at the current position and remove that position from the queue
-		sprite.Render(renderer, tempQueue.front());
+		sprite.Render(renderer, tempQueue.front().first);
 		tempQueue.pop();
 	}
 }

@@ -18,7 +18,7 @@
 class Scene
 {
 public:
-	Scene(SDL_Renderer* renderer, bool withoutSensor = false);
+	Scene(SDL_Renderer* renderer, SDL_Texture* targetTexture, bool withoutSensor = false);
 	~Scene();
 
 	void Update(NUI_SKELETON_FRAME* frame);
@@ -39,6 +39,7 @@ private:
 
 	//Rendering data
 	SDL_Renderer* renderer;
+	SDL_Texture* targetTexture;
 
 	//Scene content
 	ParticleArray<Particle> particles;

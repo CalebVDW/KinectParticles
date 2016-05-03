@@ -4,9 +4,11 @@ SDL_Surface* StaticResources::windowSurface;
 SDL_Renderer* StaticResources::renderer;
 std::map<std::string, SDL_Texture*> StaticResources::textures;
 
-void StaticResources::Initialize(SDL_Renderer* r)
+void StaticResources::Initialize(SDL_Renderer* r, SDL_Window* window)
 {
 	renderer = r;
+	windowSurface = SDL_GetWindowSurface(window);
+
 	//Initialize SDL Image
 	bool success;
 	int imgFlags = IMG_INIT_PNG;
@@ -24,20 +26,9 @@ void StaticResources::LoadPNG(std::string path, std::string spriteName)
 	if (loadedSurface == nullptr)
 	{
 		std::cout << "Image not loaded" << std::endl;
+		return;
 	}
-	else
-	{
-		//Convert surface to screen format
-		optimizedSurface = SDL_ConvertSurface(loadedSurface, windowSurface->format, NULL);
-		if (optimizedSurface == NULL)
-		{
-			printf("Unable to optimize image %s! SDL Error: %s\n", path.c_str(), SDL_GetError());
-		}
-
-		//Get rid of old loaded surface
-		SDL_FreeSurface(loadedSurface);
-	}
-	SDL_Texture* spriteTexture = SDL_CreateTextureFromSurface(renderer, optimizedSurface);
+	SDL_Texture* spriteTexture = SDL_CreateTextureFromSurface(renderer, loadedSurface);
 	textures[spriteName] = spriteTexture;
 }
 

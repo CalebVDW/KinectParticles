@@ -18,7 +18,7 @@ public:
 
 	void SetTint(glm::vec3 pTint);
 	void SetAlpha(float pAlpha);
-
+	void SetSize(int width, int height);
 private:
 	SDL_Texture* texture;
 	int width;
