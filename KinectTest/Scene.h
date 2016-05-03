@@ -2,6 +2,7 @@
 
 #include <list>
 #include <vector>
+#include <fstream>
 
 #include "Constants.h"
 #include "Particle.h"
@@ -13,12 +14,11 @@
 #include "Skeleton.h"
 
 //A container for particles, emitters, skeletons and any other objects that the game needs
-//TODO//Refactor so that default constructor uses mouse input and parameterized constructor uses Kinect input
-//This will also reduce the complexity of the code in main
 class Scene
 {
 public:
 	Scene(SDL_Renderer* renderer, SDL_Texture* targetTexture, bool withoutSensor = false);
+	Scene(SDL_Renderer* renderer, SDL_Texture* targetTexture, std::string mapFilePath, bool withoutSensor = false);
 	~Scene();
 
 	void Update(NUI_SKELETON_FRAME* frame);
@@ -49,5 +49,12 @@ private:
 
 	//Time keeping
 	long long currentTime, previousTime;
+
+	//Helper functions
+	void loadAssets();
+	void parseMapFile(std::string path);
+	void parseEmitterLine(std::string line);
+	void parseTargetLine(std::string line);
+	float popNextFloat(std::string& line);
 };
 
