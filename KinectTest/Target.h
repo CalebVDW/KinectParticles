@@ -20,5 +20,6 @@ private:
 	float radius;
 	glm::vec3 color;
 	float alpha = 1.0f;
+	Sprite sprite;
 };
 
