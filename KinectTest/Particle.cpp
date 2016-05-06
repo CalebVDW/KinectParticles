@@ -17,6 +17,7 @@ Particle::Particle(float life, glm::vec3 color, Vector pos, Vector velocity, flo
 
 
 float Particle::InverseMass() const{ return PhysicsActor::InverseMass(); }
+Vector Particle::PreviousPosition() const { return previousPosition; }
 
 void Particle::ApplyForce(Vector force)
 {
@@ -32,7 +33,7 @@ void Particle::MarkForDelete()
 	//This implementation will most likely stay in the long run 
 	age += lifeSpan;
 }
-
+void Particle::SetPosition(Vector p) { transform.SetPosition(p); }
 bool Particle::IsAlive() const
 {
 	if (age > lifeSpan)
@@ -47,6 +48,7 @@ void Particle::Update(float dt)
 	age += dt;
 
 	//Integration
+	previousPosition = transform.Position();
 	PhysicsActor::Update(dt);
 
 	//Add current position to front of tail
