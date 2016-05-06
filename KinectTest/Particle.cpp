@@ -76,7 +76,10 @@ void Particle::Render(SDL_Renderer* renderer)
 		sprite.SetAlpha(trailScalar);
 		sprite.SetTint(glm::vec3(trailScalar, 1.0f, trailScalar));
 		//Render a sprite at the current position and remove that position from the queue
-		sprite.Render(renderer, tempQueue.front().first);
+		Vector direction = glm::normalize(Velocity());
+		float angle = glm::acos(glm::dot(direction, glm::vec2(1.0f, 0)));
+		float scale = 4.0f;
+		sprite.Render(renderer, tempQueue.front().first, angle, glm::vec2(scale, 1.0f));
 		tempQueue.pop();
 	}
 }
