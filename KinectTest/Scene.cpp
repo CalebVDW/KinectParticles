@@ -224,6 +224,10 @@ void Scene::getSensorData()
 		player1.Update(deltaTime, skeletonFrame->SkeletonData[index1]);
 	else
 		player1.Deactivate();
+
+	//Resolve particle collisions with player skeletons
+	player0.ResolveCollisions(particles);
+	player1.ResolveCollisions(particles);
 }
 
 //Draw everything

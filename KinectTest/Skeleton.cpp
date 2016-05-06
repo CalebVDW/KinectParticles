@@ -60,6 +60,8 @@ void Skeleton::Render(SDL_Renderer* renderer)
 
 void Skeleton::ResolveCollisions(ParticleArray<Particle>& particles)
 {
+	if (!active)
+		return;
 	for (KinectBone& bone : bones)
 	{
 		for (int i = 0; i < particles.Size(); ++i)
