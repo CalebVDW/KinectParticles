@@ -16,10 +16,7 @@ bool RotatingTarget::Collide(Particle* p)
 
 	//Apply impulse if applicable 
 	//ApplyImpulse(p->Velocity() / p->InverseMass());
-	ApplyAngularImpulse(p->Velocity().length() * (p->InverseMass() / 10.0f));
-
-	//Apply drag force
-	//ApplyAngularImpulse()
+	ApplyAngularImpulse(p->Velocity().length() * (p->InverseMass()));	
 
 	//Delete particle
 	p->MarkForDelete();
@@ -28,7 +25,10 @@ bool RotatingTarget::Collide(Particle* p)
 void RotatingTarget::Update(float dt)
 {
 	Target::Update(dt);
+	ApplyAngularImpulse((glm::sqrt(AngularVelocity()) * -dt) / InverseMass() / 1.0f);
+	std::cout << AngularVelocity() << std::endl;
 }
+
 void RotatingTarget::Render(SDL_Renderer* renderer)
 {
 	innerSprite.Render(renderer, transform.Position(), transform.Rotation());
