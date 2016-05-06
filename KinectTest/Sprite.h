@@ -14,7 +14,7 @@ public:
 	~Sprite();
 
 	void Render(SDL_Renderer* renderer, Vector center);
-	void Render(SDL_Renderer* renderer, Vector center, float rotation, glm::vec2 scale = glm::vec2());
+	void Render(SDL_Renderer* renderer, Vector center, float rotation, glm::vec2 scale = glm::vec2(1.0f));
 
 	void SetTint(glm::vec3 pTint);
 	void SetAlpha(float pAlpha);

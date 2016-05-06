@@ -26,17 +26,20 @@ Scene::Scene(SDL_Renderer* renderer, SDL_Texture* targetTexture, std::string map
 
 void Scene::loadAssets()
 {
-	std::string spriteDir = "Sprites/dot.png";
-	StaticResources::LoadPNG(spriteDir, "dot");
+	std::string spriteDir = "Sprites/";
+	StaticResources::LoadPNG(spriteDir + "dot.png", "dot");
+	StaticResources::LoadPNG(spriteDir + "inner.png", "inner");
+	StaticResources::LoadPNG(spriteDir + "middle.png", "middle");
+	StaticResources::LoadPNG(spriteDir + "outer.png", "outer");
 }
 
 void Scene::buildDefaultLevel()
 {
 	//Emitters
-	emitters.push_back(Emitter(Transform(Vector(-1.0f, 0)), Vector(1.0f, 0), 5.0f, 1.0f));
+	emitters.push_back(new Emitter(Transform(Vector(-1.0f, 0)), Vector(1.0f, 0), 5.0f, 1.0f));
 
 	//Targets
-	targets.push_back(Target(Transform(Vector(0, 0.8f)), 0.1f));
+	targets.push_back(new RotatingTarget(Transform(Vector(0, 0.8f)), 0.1f));
 }
 
 void Scene::parseMapFile(std::string path)
@@ -90,7 +93,7 @@ void Scene::parseEmitterLine(std::string line)
 	//Get speed
 	float speed = popNextFloat(line);
 
-	emitters.push_back(Emitter(Transform(position), direction, rate, speed));
+	emitters.push_back(new Emitter(Transform(position), direction, rate, speed));
 
 }
 
@@ -121,7 +124,7 @@ void Scene::parseTargetLine(std::string line)
 	velocity.x = popNextFloat(line);
 	velocity.y = popNextFloat(line);
 
-	targets.push_back(Target(Transform(position), radius, inverseMass, velocity));
+	targets.push_back(new Target(Transform(position), radius, inverseMass, velocity));
 }
 
 float Scene::popNextFloat(std::string& line)
@@ -148,10 +151,10 @@ void Scene::Update(NUI_SKELETON_FRAME* frame)
 	(this->*dataCollection)();
 	
 	//Add new particles that are created by emitters
-	for (Emitter& e : emitters)
+	for (Emitter* e : emitters)
 	{
-		e.Update(deltaTime);
-		e.AddParticle(particles);
+		e->Update(deltaTime);
+		e->AddParticle(particles);
 	}
 
 	//Step through particles and update them
@@ -164,16 +167,16 @@ void Scene::Update(NUI_SKELETON_FRAME* frame)
 	particles.RemoveElements([](const Particle& p)->bool {return p.IsAlive(); });
 
 	//Step through targets
-	for (Target& target : targets)
+	for (Target* target : targets)
 	{
 		//Check particle collisions with target
 		for (int i = 0; i < particles.Size(); ++i)
 		{
-			target.Collide(&particles[i]);
+			target->Collide(&particles[i]);
 		}
 		
 		//Update target's location
-		target.Update(deltaTime);
+		target->Update(deltaTime);
 	}
 }
 
@@ -235,9 +238,9 @@ void Scene::Render(SDL_Renderer* r)
 	}
 
 	//Draw targets
-	for (Target& target : targets)
+	for (Target* target : targets)
 	{
-		target.Render(renderer);
+		target->Render(renderer);
 	}
 
 	//Draw skeleton

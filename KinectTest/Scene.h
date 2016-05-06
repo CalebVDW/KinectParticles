@@ -9,7 +9,7 @@
 #include "KinematicActor.h"
 #include "ForceField.h"
 #include "Emitter.h"
-#include "Target.h"
+#include "RotatingTarget.h"
 #include "ParticleArray.h"
 #include "Skeleton.h"
 
@@ -43,9 +43,9 @@ private:
 
 	//Scene content
 	ParticleArray<Particle> particles;
-	std::vector<ForceField> fields;
-	std::vector<Emitter> emitters;
-	std::vector<Target> targets;
+	std::vector<ForceField*> fields;
+	std::vector<Emitter*> emitters;
+	std::vector<Target*> targets;
 
 	//Time keeping
 	long long currentTime, previousTime;

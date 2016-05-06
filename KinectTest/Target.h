@@ -12,14 +12,15 @@ public:
 
 	//This tests intersection with a particle and deletes it if an intersection is detected
 	//This interface will need to be overhauled soon 
-	bool Collide(Particle* p);
+	virtual bool Collide(Particle* p);
 	void Update(float dt) override;
-	void Render(SDL_Renderer* renderer);
+	virtual void Render(SDL_Renderer* renderer);
 
-private:
+protected:
 	float radius;
 	glm::vec3 color;
 	float alpha = 1.0f;
+private:
 	Sprite sprite;
 };
 
