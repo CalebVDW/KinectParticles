@@ -74,7 +74,7 @@ void Skeleton::Deactivate() { active = false; }
 
 
 //KINECT BONE DEFINITIONS//////////////////////////////////////////////////////////////////////////
-Skeleton::KinectBone::KinectBone(std::vector<KinectJoint> joints, NUI_SKELETON_POSITION_INDEX jointIndex0, NUI_SKELETON_POSITION_INDEX jointIndex1)
+Skeleton::KinectBone::KinectBone(std::vector<KinectJoint>& joints, NUI_SKELETON_POSITION_INDEX jointIndex0, NUI_SKELETON_POSITION_INDEX jointIndex1)
 	:joint0{ joints[jointIndex0] }, joint1{ joints[jointIndex1] }
 {
 }

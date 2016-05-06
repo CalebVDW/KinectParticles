@@ -32,7 +32,7 @@ private:
 	//Another very simple private class to simplify working with Kinect data
 	class KinectBone {
 	public:
-		KinectBone(std::vector<KinectJoint> joints, NUI_SKELETON_POSITION_INDEX joint0, NUI_SKELETON_POSITION_INDEX joint1);
+		KinectBone(std::vector<KinectJoint>& joints, NUI_SKELETON_POSITION_INDEX joint0, NUI_SKELETON_POSITION_INDEX joint1);
 		void Render(SDL_Renderer* renderer);
 		bool ResolveCollision(Particle& p);
 	private:
