@@ -24,8 +24,9 @@ void Sprite::Render(SDL_Renderer* renderer, Vector center, float rotation, glm::
 	destRect.w = int(scale.x * float(destRect.w));
 	destRect.h = int(scale.y * float(destRect.h));
 	SDL_Point centerPoint;
-	math::NdcToPixel(centerPoint.x, centerPoint.y, center);
-	SDL_RenderCopyEx(renderer, texture, NULL, &destRect, rotation, &centerPoint, SDL_FLIP_NONE);
+	centerPoint.x = destRect.x + destRect.w / 2;
+	centerPoint.y = destRect.y + destRect.h / 2;
+	SDL_RenderCopyEx(renderer, texture, NULL, &destRect, rotation, NULL, SDL_FLIP_NONE);
 }
 
 void Sprite::SetAlpha(float pAlpha) 

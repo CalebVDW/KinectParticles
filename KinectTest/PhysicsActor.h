@@ -15,12 +15,16 @@ public:
 	//Public interface
 	float InverseMass() const;
 	float Mass() const;
+	float AngularVelocity() const;
 	Vector Velocity() const;
 
 protected:
 	//Physics engine interface
 	void ApplyForce(Vector force);
 	void ApplyImpulse(Vector impulse);
+
+	void ApplyTorque(float amt);
+	void ApplyAngularImpulse(float amt);
 
 private:
 	Vector acceleration, velocity;

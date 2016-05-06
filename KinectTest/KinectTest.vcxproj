@@ -95,6 +95,7 @@
     <ClCompile Include="KinematicActor.cpp" />
     <ClCompile Include="Particle.cpp" />
     <ClCompile Include="PhysicsActor.cpp" />
+    <ClCompile Include="RotatingTarget.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="Skeleton.cpp" />
     <ClCompile Include="Source.cpp" />
@@ -113,6 +114,7 @@
     <ClInclude Include="Particle.h" />
     <ClInclude Include="ParticleArray.h" />
     <ClInclude Include="PhysicsActor.h" />
+    <ClInclude Include="RotatingTarget.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="Skeleton.h" />
     <ClInclude Include="Sprite.h" />

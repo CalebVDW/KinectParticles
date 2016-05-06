@@ -9,7 +9,7 @@ void PhysicsActor::Update(float dt)
 	acceleration = Vector();
 
 	//Angular integration
-	angularVelocity += angularVelocity * dt;
+	angularVelocity += angularAcceleration * dt;
 	transform.Rotate(angularVelocity * dt);
 	angularAcceleration = 0;
 }
@@ -24,6 +24,15 @@ void PhysicsActor::ApplyImpulse(Vector impulse)
 	velocity += impulse * inverseMass;
 }
 
+void PhysicsActor::ApplyTorque(float amt)
+{
+	angularAcceleration += amt * inverseMass;
+}
+void PhysicsActor::ApplyAngularImpulse(float amt)
+{
+	angularVelocity += amt * inverseMass;
+}
+
 //Const interface//////////////////////////////////////////////////////////////
 float PhysicsActor::InverseMass() const{ return inverseMass; }
 float PhysicsActor::Mass() const 
@@ -33,6 +42,7 @@ float PhysicsActor::Mass() const
 	else 
 		return 1.0f / inverseMass; 
 }
+float PhysicsActor::AngularVelocity() const { return angularVelocity; }
 Vector PhysicsActor::Velocity() const { return velocity; }
 
 PhysicsActor::PhysicsActor(Transform t, float inverseMass, Vector v, float angularVelocity)
