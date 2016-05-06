@@ -70,7 +70,7 @@ void Scene::parseEmitterLine(std::string line)
 
 	//Erase emitter at the beginning
 	int i = line.find(" ", 0);
-	if (i = std::string::npos)
+	if (i == std::string::npos)
 		return;
 	line.erase(0, i + 1);
 
@@ -101,7 +101,7 @@ void Scene::parseTargetLine(std::string line)
 
 	//Erase emitter at the beginning
 	int i = line.find(" ", 0);
-	if (i = std::string::npos)
+	if (i == std::string::npos)
 		return;
 	line.erase(0, i + 1);
 
