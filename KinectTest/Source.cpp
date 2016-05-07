@@ -30,7 +30,7 @@ bool init(SDL_Window** window, SDL_Renderer** renderer, SDL_Texture** targetTex)
 	}
 
 	//Initialize window
-	*window = SDL_CreateWindow("StackOverflow", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, Constants::SCREEN_WIDTH, Constants::SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
+	*window = SDL_CreateWindow("Kinect Particles", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, Constants::SCREEN_WIDTH, Constants::SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
 	*renderer = SDL_CreateRenderer(*window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_TARGETTEXTURE);
 	*targetTex = SDL_CreateTexture(*renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_TARGET, Constants::SCREEN_WIDTH, Constants::SCREEN_HEIGHT);
 	SDL_SetRenderDrawColor(*renderer, 0, 0, 0, 0);
