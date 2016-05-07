@@ -120,6 +120,8 @@ bool Skeleton::KinectBone::ResolveCollision(Particle& particle)
 
 	Vector intersectionPt = p0 + t * r;
 
+	particle.SetPosition(a + 0.9f * (intersectionPt - a));
+
 	//Calculate impulse to apply to particle
 	Vector impulse = normal * glm::dot(normal, particle.Velocity()) * -2.0f * particle.Mass();
 	if (glm::dot(particle.Velocity(), normal) > 0)
