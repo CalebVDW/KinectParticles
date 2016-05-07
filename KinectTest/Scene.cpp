@@ -124,7 +124,7 @@ void Scene::parseTargetLine(std::string line)
 	velocity.x = popNextFloat(line);
 	velocity.y = popNextFloat(line);
 
-	targets.push_back(new Target(Transform(position), radius, inverseMass, velocity));
+	targets.push_back(new RotatingTarget(Transform(position), radius));
 }
 
 float Scene::popNextFloat(std::string& line)

@@ -56,8 +56,7 @@ int main(int argc, char** argv){
 	std::cout << "Enter the name of the level file to open" << std::endl;
 	std::string mapName;
 	std::string mapDir = "Maps/";
-	std::cin >> mapName;
-	std::string fullPath = mapDir + mapName + ".txt";
+	std::string fullPath = mapDir + "level1.txt";
 
 	//Check if there is a sensor
 	int sensorCount = 0;

@@ -49,6 +49,7 @@ private:
 
 	//Time keeping
 	long long currentTime, previousTime;
+	int currentLevel = 1;
 
 	//Helper functions
 	void loadAssets();
