@@ -15,6 +15,7 @@ public:
 	virtual bool Collide(Particle* p);
 	void Update(float dt) override;
 	virtual void Render(SDL_Renderer* renderer);
+	virtual bool Clear() const;
 
 protected:
 	float radius;

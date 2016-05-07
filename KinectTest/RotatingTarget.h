@@ -10,6 +10,7 @@ public:
 	bool Collide(Particle* p) override;
 	void Update(float dt) override;
 	void Render(SDL_Renderer* renderer) override;
+	bool Clear() const override;
 
 private:
 	Sprite innerSprite;

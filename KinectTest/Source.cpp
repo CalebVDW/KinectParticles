@@ -15,10 +15,24 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 
-//Globals because I'm a lazy bastard
 SDL_Window* window = nullptr;
 SDL_Renderer* renderer = nullptr;
 SDL_Texture* targetTexture = nullptr;
+int currentLevel = 1;
+
+std::string getNextLevel()
+{
+	if (currentLevel < 3)
+		currentLevel++;
+	else
+		currentLevel = 1;
+	switch (currentLevel)
+	{
+	case 1: return "level1";
+	case 2: return "level2";
+	case 3: return "level3";
+	}
+}
 
 //Initializes SDL only
 bool init(SDL_Window** window, SDL_Renderer** renderer, SDL_Texture** targetTex)
@@ -64,13 +78,15 @@ int main(int argc, char** argv){
 	if (sensorCount < 1)
 	{
 		std::cout << "No sensor detected. Running with mouse input" << std::endl;
-		Scene mouseScene(renderer, targetTexture, fullPath, true);
+		Scene* mouseScene = new Scene(renderer, targetTexture, fullPath, true);
 
 		//Run without sensor here
 		while (true)
 		{
-			mouseScene.Update(nullptr);
-			mouseScene.Render(renderer);
+			mouseScene->Update(nullptr);
+			mouseScene->Render(renderer);
+			if (!mouseScene->Running())
+				mouseScene = new Scene(renderer, targetTexture, mapDir + getNextLevel() + ".txt", true);
 		}
 		return 0;
 	}
@@ -115,7 +131,7 @@ int main(int argc, char** argv){
 	}
 
 	//Initialize scene
-	Scene myScene(renderer, targetTexture, fullPath);
+	Scene* myScene = new Scene(renderer, targetTexture, fullPath);
 
 	//RUN WITH SENSOR HERE///////////////////////////////////////////////////////////////////////////
 
@@ -144,8 +160,10 @@ int main(int argc, char** argv){
 			//Smooth skeleton data
 			m_sensor->NuiTransformSmooth(&myFrame, NULL);
 
-			myScene.Update(&myFrame);
-			myScene.Render(renderer);
+			myScene->Update(&myFrame);
+			myScene->Render(renderer);
+			if (!myScene->Running())
+				myScene = new Scene(renderer, targetTexture, mapDir + getNextLevel() + ".txt");
 		}
 	}
 	//END GAME LOOP////////////////////////////////////////////////////////////////////////////////

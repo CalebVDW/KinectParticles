@@ -35,6 +35,8 @@ void RotatingTarget::Render(SDL_Renderer* renderer)
 	outerSprite.Render(renderer, transform.Position(), transform.Rotation());
 }
 
+bool RotatingTarget::Clear() const { return AngularVelocity() > 2000.0f; }
+
 
 RotatingTarget::~RotatingTarget()
 {

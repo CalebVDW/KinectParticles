@@ -179,6 +179,15 @@ void Scene::Update(NUI_SKELETON_FRAME* frame)
 		target->Update(deltaTime);
 	}
 }
+bool Scene::Running()
+{
+	//Return true if there are any targets that are not clear
+	for (Target* t : targets)
+		if (!t->Clear())
+			return true;
+	return false;
+}
+
 
 void Scene::getMouseData()
 {

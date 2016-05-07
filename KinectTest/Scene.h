@@ -23,6 +23,7 @@ public:
 
 	void Update(NUI_SKELETON_FRAME* frame);
 	void Render(SDL_Renderer* r);
+	bool Running();
 
 private:
 	bool noSensor;
@@ -49,7 +50,6 @@ private:
 
 	//Time keeping
 	long long currentTime, previousTime;
-	int currentLevel = 1;
 
 	//Helper functions
 	void loadAssets();

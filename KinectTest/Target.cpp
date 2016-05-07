@@ -38,6 +38,8 @@ void Target::Render(SDL_Renderer* renderer)
 	sprite.Render(renderer, transform.Position());
 }
 
+bool Target::Clear() const { return false; }
+
 
 Target::~Target()
 {
