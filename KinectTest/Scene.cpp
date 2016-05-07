@@ -36,7 +36,7 @@ void Scene::loadAssets()
 void Scene::buildDefaultLevel()
 {
 	//Emitters
-	emitters.push_back(new Emitter(Transform(Vector(-1.0f, 0)), Vector(1.0f, 0), 5.0f, 1.0f));
+	emitters.push_back(new Emitter(Transform(Vector(-1.0f, 0)), Vector(1.0f, 0), 5.0f, 0.2f));
 
 	//Targets
 	targets.push_back(new RotatingTarget(Transform(Vector(0, 0.8f)), 0.1f));
@@ -147,6 +147,12 @@ void Scene::Update(NUI_SKELETON_FRAME* frame)
 	currentTime = SDL_GetPerformanceCounter();
 	deltaTime = float(double(currentTime - previousTime) / double(SDL_GetPerformanceFrequency()));
 
+	//Step through particles and update them
+	for (int i = 0; i < particles.Size(); ++i)
+	{
+		particles[i].Update(deltaTime);
+	}
+
 	//Process Player input
 	(this->*dataCollection)();
 	
@@ -155,12 +161,6 @@ void Scene::Update(NUI_SKELETON_FRAME* frame)
 	{
 		e->Update(deltaTime);
 		e->AddParticle(particles);
-	}
-
-	//Step through particles and update them
-	for (int i = 0; i < particles.Size(); ++i)
-	{
-		particles[i].Update(deltaTime);
 	}
 
 	//Delete particles that have exceeded their lifespan

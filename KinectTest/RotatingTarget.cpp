@@ -25,7 +25,7 @@ bool RotatingTarget::Collide(Particle* p)
 void RotatingTarget::Update(float dt)
 {
 	Target::Update(dt);
-	ApplyAngularImpulse((glm::sqrt(AngularVelocity()) * -dt) / InverseMass() / 1.0f);
+	ApplyAngularImpulse((glm::sqrt(glm::abs(AngularVelocity())) * -dt) / InverseMass() / 1.0f);
 	std::cout << AngularVelocity() << std::endl;
 }
 

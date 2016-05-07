@@ -111,11 +111,14 @@ bool Skeleton::KinectBone::ResolveCollision(Particle& particle)
 	if ((glm::dot(normal, a) - k) * (glm::dot(normal, b) - k) > 0)
 		return false;	//a and b are on the same side of the line so there was no intersection
 
-	//Potential intersection detected. Determine point of intersection 
-	float collisionDepth = (k - glm::dot(normal, a)) / (glm::dot(b - a, normal));		//Don't know what to call this variable. It's how far between a and b the collision takes place
-	Vector intersectionPoint = collisionDepth * (b - a) + a;
-	if (glm::dot(intersectionPoint, boneDirection) > glm::dot(p1, boneDirection))
+	Vector s = b - a;
+	Vector r = p1 - p0;
+	float t = math::Cross2D(a - p0, s) / math::Cross2D(r, s);
+	float u = math::Cross2D(p0 - a, r) / math::Cross2D(s, r);
+	if (u > 1.0f || u < 0 || t > 1.0f || t < 0)
 		return false;
+
+	Vector intersectionPt = p0 + t * r;
 
 	//Calculate impulse to apply to particle
 	Vector impulse = normal * glm::dot(normal, particle.Velocity()) * -2.0f * particle.Mass();

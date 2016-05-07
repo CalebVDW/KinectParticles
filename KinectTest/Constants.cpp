@@ -24,4 +24,6 @@ bool math::CircleCollision(Vector center1, Vector center2, float radius1, float 
 	return radiusSquare > distSquare;
 }
 
+float math::Cross2D(glm::vec2 a, glm::vec2 b) { return a.x * b.y - a.y * b.x; }
+
 Vector math::MakeVector(Vector4 v) { return Vector{ v.x, v.y }; }

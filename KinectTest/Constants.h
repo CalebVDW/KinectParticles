@@ -39,5 +39,7 @@ namespace math
 	//Determines if 2 circles are intersecting
 	bool CircleCollision(Vector center1, Vector center2, float radius1, float radius2);
 
+	float Cross2D(glm::vec2 a, glm::vec2 b);
+
 	Vector MakeVector(Vector4 v);
 }

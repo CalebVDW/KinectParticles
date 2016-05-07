@@ -75,10 +75,13 @@ void Particle::Render(SDL_Renderer* renderer)
 		float trailScalar = float(tempQueue.size()) / float(renderPositions.size());
 		sprite.SetAlpha(trailScalar);
 		sprite.SetTint(glm::vec3(trailScalar, 1.0f, trailScalar));
-		//Render a sprite at the current position and remove that position from the queue
+		//Determine direction of particle and stretch sprites in that direction
 		Vector direction = glm::normalize(Velocity());
 		float angle = glm::acos(glm::dot(direction, glm::vec2(1.0f, 0)));
-		float scale = 4.0f;
+		angle *= (180.0f / 3.14159265f);
+		if (direction.y > 0)
+			angle = -angle;
+		float scale = 4.0f * Velocity().length();
 		sprite.Render(renderer, tempQueue.front().first, angle, glm::vec2(scale, 1.0f));
 		tempQueue.pop();
 	}
