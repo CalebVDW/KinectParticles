@@ -16,6 +16,6 @@ private:
 	Sprite innerSprite;
 	Sprite middleSprite;
 	Sprite outerSprite;
-
+	Sprite flareSprite;
 };
 

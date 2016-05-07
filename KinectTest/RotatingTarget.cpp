@@ -3,7 +3,7 @@
 
 
 RotatingTarget::RotatingTarget(Transform t, float r, float inverseMass, Vector velocity)
-	:Target{ t, r, inverseMass, velocity }, innerSprite{ "inner", 64, 64 }, middleSprite{ "middle", 92, 92 }, outerSprite{ "outer", 128, 128 }
+	:Target{ t, r, inverseMass, velocity }, innerSprite{ "inner", 64, 64 }, middleSprite{ "middle", 92, 92 }, outerSprite{ "outer", 128, 128 }, flareSprite{ "flare", 92, 92 }
 {
 
 }
@@ -33,6 +33,8 @@ void RotatingTarget::Render(SDL_Renderer* renderer)
 	innerSprite.Render(renderer, transform.Position(), transform.Rotation());
 	middleSprite.Render(renderer, transform.Position(), -transform.Rotation());
 	outerSprite.Render(renderer, transform.Position(), transform.Rotation());
+	if (Clear())
+		flareSprite.Render(renderer, transform.Position());
 }
 
 bool RotatingTarget::Clear() const { return AngularVelocity() > 2000.0f; }

@@ -31,6 +31,7 @@ void Scene::loadAssets()
 	StaticResources::LoadPNG(spriteDir + "inner.png", "inner");
 	StaticResources::LoadPNG(spriteDir + "middle.png", "middle");
 	StaticResources::LoadPNG(spriteDir + "outer.png", "outer");
+	StaticResources::LoadPNG(spriteDir + "flare.png", "flare");
 }
 
 void Scene::buildDefaultLevel()
